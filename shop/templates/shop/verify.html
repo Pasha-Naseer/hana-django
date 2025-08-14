@@ -1,0 +1,23 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+  <section id="billboard" class="bg-light py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <h1 class="section-title text-center mt-4" data-aos="fade-up">ثبت نام</h1>
+        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
+          <h6>تا 3 دقیقه می تواند کد ارسالی را وارد کنید!</h6>
+          <form method="POST" action="{% url 'shop:verify_code' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+          <button type="submit" class="btn btn-primary">ثبت نام</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+{% endblock %}

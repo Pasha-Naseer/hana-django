@@ -1,0 +1,69 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+  <section id="billboard" class="bg-light py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <h1 class="section-title text-center mt-4" data-aos="fade-up">بازبینی خرید</h1>
+        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
+           <strong><p>سفارش خود را بررسی کنید</p></strong>
+
+        </div>
+      </div>
+    </div>
+    <div class="container">
+          <div class="card">
+  <div class="card-header">
+    خلاصه سفارش
+  </div>
+  <div class="card-body">
+    {% for product in cart_products %}
+      {{ product.name }}
+      {% if product.is_available %}
+        {% if product.has_discount %}
+          {{ product.price_with_discount }}
+        {% else %}
+          {{ product.price }}
+        {% endif %}
+      {% endif %}
+      <br/>
+      <small>تعداد:</small>
+      {% for key, value in quantities.items %}
+         {% if key == product.id|slugify %}
+             {{ value }}
+         {% endif %}
+      {% endfor %}
+
+      <br/>
+
+    {% endfor %}
+      <strong>مجموع: {{ totals }}T</strong>
+      <br/><br/>
+    <a href="{% url 'cart:cart_summary' %}" class="btn btn-sm btn-outline-secondary">ویرایش آیتم ها</a>
+  </div>
+</div>
+      <br/>
+          <div class="card">
+  <div class="card-header">
+    اطلاعات ارسال
+  </div>
+  <div class="card-body">
+      <form method="POST" action="{% url 'payment:billing_info' %}">
+        {% csrf_token %}
+        {{ shipping_form.as_p }}
+        <button type="submit" class="btn btn-secondary">پرداخت</button>
+      </form>
+
+  </div>
+
+    </div>
+      <br/>
+
+
+    </div>
+
+  </section>
+
+
+
+{% endblock %}

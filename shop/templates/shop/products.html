@@ -1,0 +1,62 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+<section id="billboard" class="bg-light py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+            <div class="card" style="width: 18rem; padding:0px;" >
+          <img class="card-img" src="{{ collection.image.url }}" alt="Card image cap">
+            </div>
+        <h1 class="section-title text-center mt-4" data-aos="fade-up">{{ collection.name }}</h1>
+        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
+
+            <p>{{ collection.description }}</p>
+            <br/>
+        </div>
+      </div>
+<div class="row">
+        <div class="swiper main-swiper py-4" data-aos="fade-up" data-aos-delay="600">
+          <div class="swiper-wrapper d-flex border-animation-left">
+            {% for product in products_list %}
+            <div class="swiper-slide">
+              <div class="banner-item image-zoom-effect">
+                <div class="image-holder">
+                  <a href="#">
+                    <img src="{{ product.image.url }}" alt="product" class="img-fluid">
+                  </a>
+                </div>
+                <div class="banner-content py-4">
+                  <h5 class="element-title text-uppercase">
+                    <a href="{% url 'shop:products_detail' product.collection.id product.id %}" class="item-anchor">{{ product.name }}</a>
+                  </h5>
+                    {% if product.description %}
+                  <p>{{ product.description }}</p>
+                    {% endif %}
+                    {% if product.is_available %}
+                  <div class="btn-left">
+                    <h6>موجود</h6>
+                  </div>
+                    {% else %}
+                    <div class="btn-left">
+                        <h6>ناموجود</h6>
+                  </div>
+                    {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+        <div class="icon-arrow icon-arrow-left"><svg width="50" height="50" viewBox="0 0 24 24">
+            <use xlink:href="#arrow-left"></use>
+          </svg></div>
+        <div class="icon-arrow icon-arrow-right"><svg width="50" height="50" viewBox="0 0 24 24">
+            <use xlink:href="#arrow-right"></use>
+          </svg></div>
+      </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+  <section id="billboard" class="bg-light py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <h1 class="section-title text-center mt-4" data-aos="fade-up">تغییر اطلاعات حساب</h1>
+        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
+          <strong>اطلاعات پرداخت</strong>
+          <form method="POST" action="{% url 'shop:update_info' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <br/><br/>
+            <strong>اطلاعات ارسال</strong>
+            {{ shipping_form.as_p }}
+          <button type="submit" class="btn btn-primary">بروزرسانی</button>
+        </form>
+            <br/><br/>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

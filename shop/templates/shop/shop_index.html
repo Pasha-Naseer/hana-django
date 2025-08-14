@@ -1,0 +1,386 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block content %}
+
+<body class="homepage">
+  <div class="preloader text-white fs-6 text-uppercase overflow-hidden"></div>
+  <section id="billboard" class="bg-light py-5">
+    <div class="container">
+      <div align="center">
+      <img src="{% static 'images/HANA.PNG' %}" width="200" height="200"/>
+    </div>
+      <div class="row justify-content-center">
+        <h1 class="section-title text-center mt-4" data-aos="fade-up" style="color: #870000">محصولات هانا</h1>
+        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="swiper main-swiper py-4" data-aos="fade-up" data-aos-delay="600">
+          <div class="swiper-wrapper d-flex border-animation-left">
+
+            {% for collection in latest_collection_list %}
+
+            <div class="swiper-slide">
+              <div class="banner-item image-zoom-effect">
+                <div class="image-holder">
+                  <a href="{% url 'shop:products_index' collection.id %}">
+                    <img src="{{ collection.image.url }}" alt="product" class="img-fluid">
+                  </a>
+                </div>
+                <div class="banner-content py-4">
+                  <h5 class="element-title text-uppercase">
+                    <a href="{% url 'shop:products_index' collection.id %}" class="item-anchor" style="color: #870000">{{ collection.name }}</a>
+                  </h5>
+                  <p style="color: #870000">{{ collection.description }}</p>
+                  {% if collection.is_available %}
+                  <div class="btn-left">
+                    <h6 style="color: #870000">موجود</h6>
+                  </div>
+                  {% else %}
+                  <div class="btn-left">
+                    <h6 style="color: #870000">ناموجود</h6>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+        <div class="icon-arrow icon-arrow-left"><img src="{% static 'images/red-arrow-left.png' %}">
+
+          </div>
+        <div class="icon-arrow icon-arrow-right"><img src="{% static 'images/red-arrow-right.png' '%}">
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="0">
+          <div class="py-5">
+            <svg width="38" height="38" viewBox="0 0 24 24">
+              <use xlink:href="#calendar"></use>
+            </svg>
+            <h4 class="element-title text-capitalize my-3">بسته بندی ویژه</h4>
+            <p>شما سفارشتونو بدین و ما اونو به خوبی به دستتون میرسونیم!</p>
+          </div>
+        </div>
+        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="300">
+          <div class="py-5">
+            <svg width="38" height="38" viewBox="0 0 24 24">
+              <use xlink:href="#shopping-bag"></use>
+            </svg>
+            <h4 class="element-title text-capitalize my-3">ارسال سریع</h4>
+            <p>سفارشو میدین و به زودی به دستتون میرسه</p>
+          </div>
+        </div>
+        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="600">
+          <div class="py-5">
+            <svg width="38" height="38" viewBox="0 0 24 24">
+              <use xlink:href="#gift"></use>
+            </svg>
+            <h4 class="element-title text-capitalize my-3">خرید حضوری</h4>
+            <p>به صورت حضوری هم  از صبخ تا شب با شماییم</p>
+          </div>
+        </div>
+        <div class="col-md-3 text-center" data-aos="fade-in" data-aos-delay="900">
+          <div class="py-5">
+            <svg width="38" height="38" viewBox="0 0 24 24">
+              <use xlink:href="#arrow-cycle"></use>
+            </svg>
+            <h4 class="element-title text-capitalize my-3">کیفیت بالا</h4>
+            <p>ما جنس بی کیفیت و ضعیف نمیفروشیم، تمام محصولات ما اورجینالن</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories overflow-hidden">
+    <div class="container">
+      <div class="open-up" data-aos="zoom-out">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="cat-item image-zoom-effect">
+              <div class="image-holder">
+
+                  <img src="{% static 'images/ata1.jpg' %}" alt="categories" class="product-image img-fluid">
+
+              </div>
+              <div class="category-content">
+                <div class="product-button">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="cat-item image-zoom-effect">
+              <div class="image-holder">
+
+                  <img src="{% static 'images/ata2.jpg' %}" alt="categories" class="product-image img-fluid">
+
+              </div>
+              <div class="category-content">
+                <div class="product-button">
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="cat-item image-zoom-effect">
+              <div class="image-holder">
+
+                  <img src="{% static 'images/ata3.jpg' %}" alt="categories" class="product-image img-fluid">
+
+              </div>
+              <div class="category-content">
+                <div class="product-button">
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="new-arrival" class="new-arrival product-carousel py-5 position-relative overflow-hidden">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mt-5 mb-3">
+        <h4 class="text-uppercase">پرفروش ها</h4>
+
+      </div>
+      <div class="swiper product-swiper open-up" data-aos="zoom-out">
+        <div class="swiper-wrapper d-flex">
+
+          {% for famous_product in famous_product_list %}
+          <div class="swiper-slide">
+            <div class="product-item image-zoom-effect link-effect">
+              <div class="image-holder position-relative">
+                <a href="index.html">
+                  <a href="{% url 'shop:products_detail' famous_product.collection.id famous_product.id %}"><img src="{{famous_product.image.url}}" alt="categories" class="product-image img-fluid"></a>
+                </a>
+                <a href="index.html" class="btn-icon btn-wishlist">
+                  <svg width="24" height="24" viewBox="0 0 24 24">
+                    <use xlink:href="#heart"></use>
+                  </svg>
+                </a>
+                <div class="product-content">
+                  <h5 class="element-title text-uppercase fs-5 mt-3">
+                    <a href="{% url 'shop:products_detail' famous_product.collection.id famous_product.id %}">{{ famous_product.name }}</a>
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+
+        <div class="swiper-pagination"></div>
+      </div>
+      <div class="icon-arrow icon-arrow-left"><svg width="50" height="50" viewBox="0 0 24 24">
+          <use xlink:href="#arrow-left"></use>
+        </svg></div>
+      <div class="icon-arrow icon-arrow-right"><svg width="50" height="50" viewBox="0 0 24 24">
+          <use xlink:href="#arrow-right"></use>
+        </svg></div>
+    </div>
+    </div>
+  </section>
+
+  <section class="collection bg-light position-relative py-5">
+    <div class="container">
+      <div class="row">
+        <div class="title-xlarge text-uppercase txt-fx domino">Collection</div>
+        <div class="collection-item d-flex flex-wrap my-5">
+          <div class="col-md-6 column-container">
+            <div class="image-holder">
+              <img src="{% static 'images/hana_wallpaper.jpg' %}" alt="collection" class="product-image img-fluid">
+            </div>
+          </div>
+          <div class="col-md-6 column-container bg-white">
+            <div class="collection-content p-5 m-0 m-md-5">
+              <h3 class="element-title text-uppercase">چرا از هانا خرید کنم؟</h3>
+              <p>هانا از سال 1394 فعالیت خود را در زمینه لوازم آرایشی بهداشتی آغاز کرد، از همان ابتدا به دلیل عرضه محصولات اورجینال و کاربردی مورد توجه همشهریان عزیز قرار گرفت. هانا سالها بخاطر رفتار صادقانه و حرفه ای با مشتریانش توانسته است انتخاب اول آنها باقی بماند. شما هم با یکبار استفاده از محصولات ما به طور قطعی از مشتریان ارزشمند ما خواهید شد. اعتماد شما باعث سربلندی ماست.</p>
+              <a href="#" class="btn btn-dark text-uppercase mt-3">کالکشن محصولات</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="video py-5 overflow-hidden">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="video-content open-up" data-aos="zoom-out">
+          <div class="video-bg">
+            <img src="{% static 'images/video_wallpaper.jpg' %}" alt="video" class="video-image img-fluid">
+          </div>
+          <div class="video-player">
+            <a class="youtube" href="https://www.youtube.com/embed/pjtsGzQjFM4">
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <use xlink:href="#play"></use>
+              </svg>
+              <img src="{% static 'images/text-pattern.png' %}" alt="pattern" class="text-rotate">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials py-5 bg-light">
+    <div class="section-header text-center mt-5">
+      <h3 class="section-title">ما عاشق پیشنهاداتتون هستیم</h3>
+    </div>
+    <div class="swiper testimonial-swiper overflow-hidden my-5">
+      <div class="swiper-wrapper d-flex">
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p>"استفاده از محصولات هانا، یکی از بهترین تجربه های خرید من بود"</p>
+              <div class="review-title text-uppercase">لیدا فرخی</div>
+            </blockquote>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p>"آقا عطا برای ما یک دوست ارزشمند و یک فروشنده فوق العاده قابل اعتماد است"</p>
+              <div class="review-title text-uppercase">سمانه گشتاسبی</div>
+            </blockquote>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p>"قبل اینکه با هانا آشنا بشم همیشه از امتحان محصولات جدید میترسیدم ولی با استفاده از پیشنهادات هانا کیفیت انتخابام بهتر شد"</p>
+              <div class="review-title text-uppercase">ماهرخ افشاری</div>
+            </blockquote>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center">
+            <blockquote>
+              <p>"انتظار نداشتم که اینهمه با حوصله و خوب رفتار کنن"</p>
+              <div class="review-title text-uppercase">سهیلا کاظمی</div>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-swiper-pagination d-flex justify-content-center mb-5"></div>
+  </section>
+
+
+  <section class="blog py-5">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mt-5 mb-3">
+        <h4 class="text-uppercase">وبلاگ های ما را بخوانید</h4>
+       <h4 class="btn-lin k" style="font-family: 'VAZIRmatn' !important; color: #000000"><a href="{% url 'shop:blog' %}">همه</a></h4>
+      </div>
+      <div class="row">
+        {% for blog in blog_list %}
+        <div class="col-md-4">
+          <article class="post-item">
+            <div class="post-image">
+              <a href="{% url 'shop:blog_detail' blog.id %}">
+                <img src="{{ blog.blog_image.url }}" alt="image" class="post-grid-image img-fluid">
+              </a>
+            </div>
+            <div class="post-content d-flex flex-wrap gap-2 my-3">
+
+              <h5 class="post-title text-uppercase">
+                <a href="{% url 'shop:blog_detail' blog.id %}">{{ blog.title }}</a>
+              </h5>
+              <p>{{ blog.body_summary }}...</p>
+                      <div class="post-meta text-uppercase fs-6 text-secondary">
+
+                <span class="meta-day">{{ blog.pub_date }}</span>
+              </div>
+            </div>
+          </article>
+        </div>
+        {% endfor %}
+
+
+      </div>
+    </div>
+  </section>
+
+  <section class="logo-bar py-5 my-5">
+    <div class="container">
+      <div class="row">
+        <div class="logo-content d-flex flex-wrap justify-content-between">
+          <img src="{% static 'images/logo1.png' %}" alt="logo" class="logo-image img-fluid">
+          <img src="{% static 'images/logo2.png' %}" alt="logo" class="logo-image img-fluid">
+          <img src="{% static 'images/logo3.png' %}" alt="logo" class="logo-image img-fluid">
+          <img src="{% static 'images/logo4.png' %}" alt="logo" class="logo-image img-fluid">
+          <img src="{% static 'images/logo5.png' %}" alt="logo" class="logo-image img-fluid">
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="instagram position-relative">
+    <div class="d-flex justify-content-center w-100 position-absolute bottom-0 z-1">
+      <a href="https://www.instagram.com/galleryhana_shop?igsh=cDZpejIwbWY4dHZ4" class="btn btn-dark px-5">ما را در اینستاگرام دنبال کنید</a>
+    </div>
+    <div class="row g-0">
+      <div class="col-6 col-sm-4 col-md-2">
+        <div class="insta-item">
+          <a href="https://www.instagram.com/reel/DLp8QOqiYWJ/?igsh=a3VvNGJ1ZDBscmNz" target="_blank">
+            <img src="{% static 'images/insta-cover3.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          </a>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-2">
+        <div class="insta-item">
+          <a href="https://www.instagram.com/p/DL8BXMFAyYI/?img_index=4&igsh=MTQxNXZ5Zjh6OXl6cA==" target="_blank">
+            <img src="{% static 'images/insta-cover2.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          </a>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-2">
+        <div class="insta-item">
+          <a href="https://www.instagram.com/reel/DLp8QOqiYWJ/?igsh=a3VvNGJ1ZDBscmNz" target="_blank">
+            <img src="{% static 'images/insta-cover3.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          </a>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-2">
+        <div class="insta-item">
+          <a href="https://www.instagram.com/reel/DLiJWveCDK6/?igsh=OGhjeno3cWNndHU1" target="_blank">
+            <img src="{% static 'images/insta-cover4.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          </a>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-2">
+        <div class="insta-item">
+          <a href="https://www.instagram.com/p/DKNI-sYiwJR/?igsh=ZWtxM2EwNTczMWJ0" target="_blank">
+            <img src="{% static 'images/insta-cover5.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          </a>
+        </div>
+      </div>
+      <div class="col-6 col-sm-4 col-md-2">
+        <div class="insta-item">
+          <a href="https://www.instagram.com/reel/DLp8QOqiYWJ/?igsh=a3VvNGJ1ZDBscmNz" target="_blank">
+            <img src="{% static 'images/insta-cover2.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+{% endblock %}

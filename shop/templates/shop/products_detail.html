@@ -1,0 +1,89 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+    <section id="billboard" class="bg-light py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+           <div class="card" style="width: 40rem; padding:0px;" >
+          <img class="card-img" src="{{ product.image.url }}" alt="Card image cap">
+          </div>
+        <h1 class="section-title text-center mt-4" data-aos="fade-up">{{ product.name }}</h1>
+
+        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
+
+            {% if product.is_available %}
+            <h6>موجود</h6>
+            {% else %}
+            <h6>ناموجود</h6>
+            {% endif %}
+            {% if product.description %}
+                <p>{{ product.description }}</p>
+            {% endif %}
+            <h3>قیمت: {{ product.price }}T</h3>
+            {% if product.has_discount %}
+                <h4>تخفیف دارد</h4>
+                <h3>تخفیف: {{ product.discount }}%</h3>
+                <h3>قیمت نهایی: {{ product.price_with_discount }}T</h3>
+            {% else %}
+                <h4>تخفیف ندارد</h4>
+            <br/>
+            {% endif %}
+            <div class="row justify-content-center">
+                 <div class="col-md-2"><h4>تعداد</h4></div>
+                    <div class="col-md-2">
+            <select class="form-select" id="qty-cart">
+
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+            </div>
+            </div>
+            <br/>
+
+
+            <button type="button" value="{{ product.id }}" class="btn btn-secondary" id="add-cart" >اضافه به سبد خرید</button>
+
+        </div>
+      </div>
+    </div>
+    </section>
+
+
+<script>
+// Check if button pressed
+$(document).on('click', '#add-cart', function(e){
+    e.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: '{% url 'cart:cart_add' %}',
+        data: {
+            product_id: $('#add-cart').val(),
+            product_qty: $('#qty-cart option:selected').text(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            action: 'post'
+        },
+        success: function(json){
+            //console.log(json)
+            document.getElementById("cart_quantity").textContent = json.qty
+            location.reload();
+        },
+        error: function(xhr, errmsg, err){
+        }
+
+    });
+
+})
+
+</script>
+{% endblock %}
+
+
+
+
+
+
+

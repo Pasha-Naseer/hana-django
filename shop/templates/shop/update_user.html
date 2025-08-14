@@ -1,0 +1,22 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+  <section id="billboard" class="bg-light py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <h1 class="section-title text-center mt-4" data-aos="fade-up">تغییر اطلاعات پروفایل</h1>
+        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
+          <form method="POST" action="{% url 'shop:update' %}">
+            {% csrf_token %}
+            {{ user_form.as_p }}
+          <button type="submit" class="btn btn-primary">تغییر اطلاعات</button>
+        </form>
+            <br/><br/>
+            <a href="{% url 'shop:update_password' %}" class="btn btn-secondary">تغببر رمز</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
