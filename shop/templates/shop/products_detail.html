@@ -1,56 +1,139 @@
 {% extends 'shop/base.html' %}
-
+{% load humanize %}
 {% block content %}
+<section id="billboard" class="py-4" style="background:#fff;">
+  <div class="container">
 
-    <section id="billboard" class="bg-light py-5">
-    <div class="container">
-      <div class="row justify-content-center">
-           <div class="card" style="width: 40rem; padding:0px;" >
-          <img class="card-img" src="{{ product.image.url }}" alt="Card image cap">
-          </div>
-        <h1 class="section-title text-center mt-4" data-aos="fade-up">{{ product.name }}</h1>
+    <div class="row justify-content-center">
+      <!-- Product Image -->
+      <div class="card shadow-sm border-0 mb-3" style="width:28rem; border-radius:12px; overflow:hidden;" data-aos="zoom-in">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}"
+             style="width:100%; height:auto; object-fit:cover;">
+      </div>
+    </div>
 
-        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
+    <!-- Product Title -->
+    <h2 class="section-title text-center mb-3" data-aos="fade-up"
+        style="color:#870000; font-family:'VAZIRmatn' !important; font-weight:bold; font-size:1.4rem;">
+      {{ product.name }}
+    </h2>
 
-            {% if product.is_available %}
-            <h6>موجود</h6>
-            {% else %}
-            <h6>ناموجود</h6>
-            {% endif %}
-            {% if product.description %}
-                <p>{{ product.description }}</p>
-            {% endif %}
-            <h3>قیمت: {{ product.price }}T</h3>
-            {% if product.has_discount %}
-                <h4>تخفیف دارد</h4>
-                <h3>تخفیف: {{ product.discount }}%</h3>
-                <h3>قیمت نهایی: {{ product.price_with_discount }}T</h3>
-            {% else %}
-                <h4>تخفیف ندارد</h4>
-            <br/>
-            {% endif %}
-            <div class="row justify-content-center">
-                 <div class="col-md-2"><h4>تعداد</h4></div>
-                    <div class="col-md-2">
-            <select class="form-select" id="qty-cart">
+    <!-- Product Details -->
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center" data-aos="fade-up" data-aos-delay="200">
 
+        <!-- Availability -->
+        {% if product.is_available %}
+        <span class="badge" style="background:#870000; color:white; border-radius:6px; padding:4px 8px; font-size:0.8rem;">
+          موجود
+        </span>
+        {% else %}
+        <span class="badge" style="background:#999; color:white; border-radius:6px; padding:4px 8px; font-size:0.8rem;">
+          ناموجود
+        </span>
+        {% endif %}
+
+        <!-- Description -->
+        {% if product.description %}
+        <p class="mt-2" style="color:#444; font-size:0.85rem; line-height:1.5;">
+          {{ product.description }}
+        </p>
+        {% endif %}
+<!-- Price & Discount -->
+{% if product.has_discount %}
+  <!-- Original Price with Red Cross -->
+  <h5 class="mt-3" style="color:#999; font-size:1rem; text-decoration: line-through; text-decoration-color:red;">
+    قیمت: {{ product.price|intcomma }}T
+  </h5>
+  <!-- Discount Info -->
+  <h5 style="color:#870000; font-size:1rem;">تخفیف: {{ product.discount }}%</h5>
+  <h5 style="color:#870000; font-size:1rem;">قیمت نهایی: {{ product.price_with_discount|intcomma }}T</h5>
+{% else %}
+  <!-- Normal Price (no discount) -->
+  <h5 class="mt-3" style="color:#870000; font-size:1rem;">
+    قیمت: {{ product.price|intcomma }}T
+  </h5>
+  <h6 style="color:#999; font-size:0.9rem;">تخفیف ندارد</h6>
+{% endif %}
+
+
+        <!-- Quantity Selector -->
+        <div class="row justify-content-center align-items-center mt-3">
+          <div class="col-md-2"><h6 style="color:#444; font-size:0.9rem;">تعداد</h6></div>
+          <div class="col-md-2">
+            <select class="form-select text-center" id="qty-cart" style="border-radius:6px; font-size:0.85rem; padding:4px;">
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
               <option value="5">5</option>
             </select>
-            </div>
-            </div>
-            <br/>
+          </div>
+        </div>
 
+        <!-- Add to Cart Button -->
+        <button type="button" value="{{ product.id }}" class="btn mt-3" id="add-cart"
+                style="background:#870000; color:white; border-radius:6px; padding:6px 14px; font-size:0.9rem;">
+          اضافه به سبد خرید
+        </button>
+        <br/>
+        <a href="{% url 'cart:cart_summary' %}" class="btn mt-3" style="background:#870000; color:white; border-radius:6px; padding:6px 14px; font-size:0.9rem;">سبد خرید</a>
+      </div>
+     {% if product.help_images %}
+<div class="container text-center my-4">
 
-            <button type="button" value="{{ product.id }}" class="btn btn-secondary" id="add-cart" >اضافه به سبد خرید</button>
+  <!-- Image row -->
+  <div class="d-flex justify-content-center gap-3 flex-wrap">
 
+    {% if product.image_1 %}
+    <div class="image-holder" style="width: 150px; cursor: pointer;">
+      <img src="{{ product.image_1.url }}" alt="{{ product.name }}" class="img-fluid rounded shadow-sm border"
+           data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage('{{ product.image_1.url }}')">
+    </div>
+    {% endif %}
+
+    {% if product.image_2 %}
+    <div class="image-holder" style="width: 150px; cursor: pointer;">
+      <img src="{{ product.image_2.url }}" alt="{{ product.name }}" class="img-fluid rounded shadow-sm border"
+           data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage('{{ product.image_2.url }}')">
+    </div>
+    {% endif %}
+
+    {% if product.image_3 %}
+    <div class="image-holder" style="width: 150px; cursor: pointer;">
+      <img src="{{ product.image_3.url }}" alt="{{ product.name }}" class="img-fluid rounded shadow-sm border"
+           data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage('{{ product.image_3.url }}')">
+    </div>
+    {% endif %}
+
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-transparent border-0">
+        <div class="modal-body p-0 text-center">
+          <img id="modalImage" src="" alt="Product image" class="img-fluid rounded shadow-lg">
         </div>
       </div>
     </div>
-    </section>
+  </div>
+
+</div>
+
+<!-- Script to update modal image -->
+<script>
+  function showImage(src) {
+    document.getElementById('modalImage').src = src;
+  }
+</script>
+{% endif %}
+
+
+        </div>
+    </div>
+
+</section>
 
 
 <script>
@@ -67,23 +150,12 @@ $(document).on('click', '#add-cart', function(e){
             action: 'post'
         },
         success: function(json){
-            //console.log(json)
             document.getElementById("cart_quantity").textContent = json.qty
             location.reload();
         },
         error: function(xhr, errmsg, err){
         }
-
     });
-
 })
-
 </script>
 {% endblock %}
-
-
-
-
-
-
-

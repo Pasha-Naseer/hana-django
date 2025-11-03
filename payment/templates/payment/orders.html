@@ -1,5 +1,5 @@
 {% extends 'shop/base.html '%}
-
+{% load humanize %}
 {% block content %}
   <section id="billboard" class="bg-light py-5">
     <div class="container">
@@ -12,7 +12,7 @@
                 سفارش شماره {{ order.id }} - {{ order.amount_paid }}T
               </div>
               <div class="card-body">
-                ایمیل: {{ order.email }}<br/>
+                شماره تماس: {{ order.email }}<br/>
                 {% if order.date_shipped %}
                   تاریخ ارسال: {{ order.date_shipped}}
                 {% else %}
@@ -22,7 +22,7 @@
                 {{ order.full_name }}<br/>
                 <pre>{{ order.shipping_address }}</pre><br/>
                 {% for item in items %}
-                <h6>{{ item.product }}</h6><h6>{{ item.quantity }} عدد</h6><h6>{{ item.price }}T</h6><br/>
+                <h6>{{ item.product }}</h6><h6>{{ item.quantity }} عدد</h6><h6>{{ item.price|intcomma }}T</h6><br/>
 
                 {% endfor %}
                 <br/><br/>

@@ -2,21 +2,54 @@
 
 {% block content %}
 
-  <section id="billboard" class="bg-light py-5">
-    <div class="container">
-      <div class="row justify-content-center">
-        <h1 class="section-title text-center mt-4" data-aos="fade-up">ثبت نام</h1>
-        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
-          <form method="POST" action="{% url 'shop:register' %}">
-            {% csrf_token %}
+<section id="billboard" class="py-5" style="background:#ffffff;">
+  <div class="container">
+    <div class="row justify-content-center">
+
+      <!-- Title -->
+      <h1 class="section-title text-center mt-4" data-aos="fade-up"
+          style="color:#222; font-weight:bold; letter-spacing:0.5px;">
+        ثبت نام
+      </h1>
+
+      <!-- Register Card -->
+      <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300"
+           style="background:#fff; padding:35px; border-radius:18px;
+                  box-shadow:0 6px 18px rgba(0,0,0,0.08);">
+
+        <form method="POST" action="{% url 'shop:register' %}" style="text-align:center;">
+          {% csrf_token %}
+
+          <!-- Django form -->
+          <div style="text-align:center; direction:rtl; margin-bottom:20px;">
             {{ form.as_p }}
-          <button type="submit" class="btn btn-primary">ثبت</button>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit"
+                  style="background:#f8f9fa; color:#333; border:none; padding:12px 28px;
+                         border-radius:12px; font-weight:bold;
+                         box-shadow:0 4px 12px rgba(0,0,0,0.1); transition:0.3s;">
+            ثبت
+          </button>
         </form>
-        </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
+<script>
+  // Button hover animation
+  const btn = document.querySelector("button[type='submit']");
+  btn.addEventListener("mouseover", () => {
+    btn.style.background = "#e9ecef";
+    btn.style.transform = "translateY(-2px)";
+  });
+  btn.addEventListener("mouseout", () => {
+    btn.style.background = "#f8f9fa";
+    btn.style.transform = "translateY(0)";
+  });
+</script>
 
 
 {% endblock %}

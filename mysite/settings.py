@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "shop.apps.ShopConfig",
     'cart.apps.CartConfig',
     'payment.apps.PaymentConfig',
-    'ckeditor',
+    'django_ckeditor_5',
+'django.contrib.humanize',
     #'ckeditor_uploader'
 ]
 
@@ -113,6 +114,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
+AUTH_USER_MODEL = 'shop.User'
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Tehran'
@@ -134,17 +137,33 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'shop.User'
 
-CKEDITOR_CONFIGS = {
+
+CKEDITOR_5_CONFIGS = {
     'default': {
-        'toolbar': 'full',
-        'extraPlugins': 'font',  # add font plugin
-        'font_names': 'Arial;Times New Roman;Verdana;Courier New;Tahoma;Vazir',
         'toolbar': [
-            ['Bold', 'Italic', 'Underline'],
-            ['Font', 'FontSize'],
-            # add more toolbar buttons as needed
+            'heading', '|',
+            'bold', 'italic', 'underline', '|',
+            'fontFamily', 'fontSize', '|',
+            'link', 'blockQuote', 'numberedList', 'bulletedList', '|',
+            'insertTable', 'undo', 'redo'
         ],
-    },
+        'fontFamily': {
+            'options': ['default', 'Arial', 'Times New Roman', 'Verdana', 'Courier New', 'Tahoma', 'Vazir']
+        },
+        'fontSize': {
+            'options': ['tiny', 'small', 'default', 'large', 'huge']
+        },
+        'heading': {
+            'options': [
+                {'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph'},
+                {'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1'},
+                {'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2'},
+            ]
+        },
+    }
 }
+
+MERCHANT = "131e5305-705e-4db9-95d1-3b18da914c86"
+
+SANDBOX = True

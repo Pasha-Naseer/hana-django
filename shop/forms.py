@@ -11,6 +11,8 @@ from django import forms
 from .models import User, Profile
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.core.validators import MinLengthValidator
+
 
 
 class UserInfoForm(forms.ModelForm):
@@ -177,7 +179,7 @@ class UserRegistrationForm(forms.Form):
     first_name = forms.CharField(max_length=225)
     last_name = forms.CharField(max_length=225)
 
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput, validators=[MinLengthValidator(8)])
 
     def __init__(self, *args, **kwargs):
 
@@ -200,6 +202,7 @@ class UserRegistrationForm(forms.Form):
 
         self.fields['password'].widget.attrs['class'] = 'form-control'
         self.fields['password'].widget.attrs['placeholder'] = 'رمز'
+
         self.fields['password'].label = ''
         self.fields['password'].help_text = '<ul class="form-text text-muted small"><li>رمزتان نباید با سایر اطلاعات شما مشابه باشد</li><li>رمزتان باید حداقل دارای 8 کاراکتر باشد</li><li>رمزتان نباید رمز رایجی باشد</li><li>رمزتان نباید تماما عددی باشد</li></ul>'
 
@@ -220,7 +223,6 @@ class UserRegistrationForm(forms.Form):
         user = User.objects.filter(username=username).exists()
         if user:
             raise ValidationError("Username Already Exists")
-
 
 
 # is

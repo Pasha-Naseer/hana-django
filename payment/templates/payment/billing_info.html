@@ -1,93 +1,94 @@
 {% extends 'shop/base.html' %}
-
+{% load humanize %}
 {% block content %}
-  <section id="billboard" class="bg-light py-5">
-    <div class="container">
-      <div class="row justify-content-center">
-        <h1 class="section-title text-center mt-4" data-aos="fade-up">اطلاعات پرداخت</h1>
-        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
-           <strong><p>اطلاعات پرداختتان را وارد کنید</p></strong>
-
-        </div>
+<section class="payment-info py-5" style="background: linear-gradient(135deg, #ff4b5c, #d90429);">
+  <div class="container text-white">
+    <div class="row justify-content-center">
+      <h1 class="section-title text-center mt-4" data-aos="fade-up">اطلاعات پرداخت</h1>
+      <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
+        <strong><p>اطلاعات پرداختتان را وارد کنید</p></strong>
       </div>
     </div>
-    <div class="container">
-          <div class="card">
-  <div class="card-header">
-    خلاصه سفارش
   </div>
-  <div class="card-body">
-    {% for product in cart_products %}
-      {{ product.name }}
-      {% if product.is_available %}
-        {% if product.has_discount %}
-          {{ product.price_with_discount }}
-        {% else %}
-          {{ product.price }}
-        {% endif %}
-      {% endif %}
-      <br/>
-      <small>تعداد: </small>
-      {% for key, value in quantities.items %}
-         {% if key == product.id|slugify %}
-             {{ value }}
-         {% endif %}
-      {% endfor %}
 
-      <br/>
+  <div class="container mt-4">
 
-    {% endfor %}
-      <strong>مجموع: {{ totals }}T</strong>
-      <br/><br/>
-    <a href="{% url 'cart:cart_summary' %}" class="btn btn-sm btn-outline-secondary">ویرایش آیتم ها</a>
-  </div>
-</div>
-      <br/>
-          <div class="card">
-  <div class="card-header">
-    اطلاعات ارسال
-  </div>
-  <div class="card-body">
-        Name: {{ shipping_info.shipping_full_name }}<br/>
-        Email: {{ shipping_info.shipping_email }}<br/>
-        Address 1: {{ shipping_info.shipping_address1 }}<br/>
-        Address 2: {{ shipping_info.shipping_address2 }}<br/>
-        City: {{ shipping_info.shipping_city }}<br/>
-        State: {{ shipping_info.shipping_state }}<br/>
-        Zipcode: {{ shipping_info.shipping_zipcode }}<br/>
-        Country: {{ shipping_info.shipping_country }}<br/>
+    <!-- Order Summary Card -->
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+      <div class="card-header bg-light fw-bold">
+        خلاصه سفارش
+      </div>
+      <div class="card-body">
+        {% for product in cart_products %}
+          <div class="mb-3">
+            <h5 class="mb-1">{{ product.name }}</h5>
+            <p class="mb-1 text-muted">
+              {% if product.is_available %}
+                {% if product.has_discount %}
+                  {{ product.price_with_discount|intcomma }}
+                {% else %}
+                  {{ product.price|intcomma }}
+                {% endif %}
+              {% else %}
+                <span class="text-danger">ناموجود</span>
+              {% endif %}
+            </p>
+            <small class="text-muted">تعداد:
+              {% for key, value in quantities.items %}
+                {% if key == product.id|slugify %}
+                  {{ value }}
+                {% endif %}
+              {% endfor %}
+            </small>
+          </div>
+        {% endfor %}
+
+        <hr>
+        <strong>مجموع: {{ totals|intcomma }}T</strong>
+        <br/><br/>
+        <a href="{% url 'cart:cart_summary' %}" class="btn btn-outline-secondary rounded-pill px-4">
+          ویرایش آیتم‌ها
+        </a>
+      </div>
+    </div>
+
+    <!-- Shipping Info Card -->
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+      <div class="card-header bg-light fw-bold">
+        اطلاعات ارسال
+      </div>
+      <div class="card-body">
+        <p class="mb-1">نام: {{ shipping_info.shipping_full_name }}</p>
+        <p class="mb-1">ایمیل: {{ shipping_info.shipping_email }}</p>
+        <p class="mb-1">آدرس 1: {{ shipping_info.shipping_address1 }}</p>
+        <p class="mb-1">آدرس 2: {{ shipping_info.shipping_address2 }}</p>
+        <p class="mb-1">شهر: {{ shipping_info.shipping_city }}</p>
+        <p class="mb-1">استان: {{ shipping_info.shipping_state }}</p>
+        <p class="mb-1">کدپستی: {{ shipping_info.shipping_zipcode }}</p>
         <br/>
-        <a href="{% url 'payment:checkout' %}" class="btn btn-outline-secondary">ویرایش اطلاعات ارسال</a>
+        <a href="{% url 'payment:checkout' %}" class="btn btn-outline-secondary rounded-pill px-4">
+          ویرایش اطلاعات ارسال
+        </a>
+      </div>
 
-
- 
-  </div>
-
-  <div class="card-header">
-    اطلاعات پرداخت
-  </div>
-  <div class="card-body">
-      <form method="POST" action="{% url 'payment:process_order' %}">
+      <!-- Payment Info -->
+      <div class="card-header bg-light fw-bold">
+        اطلاعات پرداخت
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{% url 'payment:process_order' %}">
           {% csrf_token %}
-        {{ billing_form.as_p }}
-        <br/>
-<button type="submit" class="btn btn-secondary">پرداخت</button>
-      </form>
-
+          {{ billing_form.as_p }}
+          <br/>
+          <button type="submit" class="btn btn-outline-success rounded-pill px-4 mt-2">
+            پرداخت
+          </button>
+        </form>
+      </div>
+    </div>
 
   </div>
-
-
-    </div>
-
-
-      <br/>
-
-
-    </div>
-
-  </section>
-
+</section>
 
 
 {% endblock %}

@@ -9,9 +9,23 @@ from .managers import UserManager
 from django.utils import timezone
 from datetime import datetime
 # pip install django-ckeditor
-from ckeditor.fields import RichTextField
 from django.db.models.signals import post_save
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 
+
+class Blog(models.Model):
+    title = models.CharField(max_length=200)
+    blog_image = models.ImageField()
+    body = models.TextField
+    # body = models.TextField(max_length=150000)
+    pub_date = models.DateTimeField("creation date")
+    body_summary = models.TextField(max_length=115, null=True)
+
+    # def body_summary(self):
+    #     return self.body[:102]
+
+    def __str__(self):
+        return self.title
 
 # is
 class User(AbstractBaseUser):
@@ -21,6 +35,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
     is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     objects = UserManager()
 
@@ -105,14 +120,18 @@ class Collection(models.Model):
     def __str__(self):
         return f"{self.name}"
 
-
+# موجودی پرابلم
 class Product(models.Model):
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
-    description = models.TextField(max_length=200, null=True, blank=True)
+    description = models.TextField(max_length=2000, null=True, blank=True)
     name = models.CharField(max_length=200)
     price = models.DecimalField(default=0, decimal_places=0, max_digits=10)
     is_available = models.BooleanField(default=False)
     image = models.ImageField(blank=True, default="fallback.png")
+    help_images = models.BooleanField(default=False)
+    image_1 = models.ImageField(blank=True, null=True, default='fallback.png')
+    image_2 = models.ImageField(blank=True, null=True, default='fallback.png')
+    image_3 = models.ImageField(blank=True, null=True, default='fallback.png')
     has_discount = models.BooleanField(default=False)
     discount = models.DecimalField(null=True, blank=True, decimal_places=0, max_digits=2)
     pub_date = models.DateTimeField("creation date")
@@ -137,18 +156,4 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.product} by {self.customer}"
 
-
-class Blog(models.Model):
-    title = models.CharField(max_length=200)
-    blog_image = models.ImageField()
-    body = RichTextField()
-    # body = models.TextField(max_length=150000)
-    pub_date = models.DateTimeField("creation date")
-    body_summary = models.TextField(max_length=115, null=True)
-
-    # def body_summary(self):
-    #     return self.body[:102]
-
-    def __str__(self):
-        return self.title
 

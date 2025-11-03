@@ -2,89 +2,109 @@
 {% extends 'shop/base.html '%}
 
 {% block content %}
-  <section id="billboard" class="bg-light py-5">
-    <div class="container">
-      <div class="row justify-content-center">
-        <h1 class="section-title text-center mt-4" data-aos="fade-up">جست و جوی محصولات</h1>
-        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
-           <strong>با جست و جوی کلمات کلیدی محصول مورد نظر خود را پیدا کنید...</strong>
-            <br/>
-<br/>
-      <div class="card">
-  <div class="card-header">
-    جست و جو
-  </div>
-  <div class="card-body">
-   <form method="POST" action="{%  url 'shop:search' %}">
-       {% csrf_token %}
-       <div class="mb-3">
-  <label for="exampleFormControlInput1" class="form-label"></label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="کلمات مرتبط با کالا یا نام کالا" name="searched">
-</div>
-<button type="submit" class="btn btn-secondary">پیدا کن</button>
-   </form>
-  </div>
-</div>
-            <br/><br/>
-            {% if searched %}
 
-<div class="row">
-        <div class="swiper main-swiper py-4" data-aos="fade-up" data-aos-delay="600">
-          <div class="swiper-wrapper d-flex border-animation-left">
+<section id="billboard" class="py-5" style="background:#fff;">
+  <div class="container text-center">
 
-            {% for product in searched %}
+    <!-- Section Title -->
+    <h1 class="section-title mb-4" data-aos="fade-up"
+        style="color:#870000; font-family:'VAZIRmatn' !important; font-weight:bold; font-size:2rem;">
+      جست و جوی محصولات
+    </h1>
 
-            <div class="swiper-slide">
-              <div class="banner-item image-zoom-effect">
-                <div class="image-holder">
-                  <a href="#">
-                    <img src="{{ product.image.url }}" alt="product" class="img-fluid">
-                  </a>
-                </div>
-                <div class="banner-content py-4">
-                  <h5 class="element-title text-uppercase">
-                    <a href="{% url 'shop:products_detail' product.collection.id product.id %}" class="item-anchor">{{ product.name }}</a>
-                  </h5>
-                    {% if product.description %}
-                  <p>{{ product.description }}</p>
-                    {% endif %}
-                    {% if product.is_available %}
-                  <div class="btn-left">
-                    <a href="#" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">Available</a>
-                  </div>
-                    {% else %}
-                    <div class="btn-left">
-                    <a href="#" class="btn-link fs-6 text-uppercase item-anchor text-decoration-none">Unavailable</a>
-                  </div>
-                    {% endif %}
-                </div>
-              </div>
-            </div>
+    <!-- Search Description -->
+    <div class="col-md-6 mx-auto mb-4" data-aos="fade-up" data-aos-delay="200" style="color:#444;">
+      <strong>با جست و جوی کلمات کلیدی محصول مورد نظر خود را پیدا کنید...</strong>
+    </div>
 
-            {% endfor %}
-
-
-          </div>
-          <div class="swiper-pagination"></div>
+    <!-- Search Card -->
+    <div class="col-md-6 mx-auto mb-5">
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-header" style="background:#870000; color:white; font-weight:bold;">
+          جست و جو
         </div>
-        <div class="icon-arrow icon-arrow-left"><svg width="50" height="50" viewBox="0 0 24 24">
-            <use xlink:href="#arrow-left"></use>
-          </svg></div>
-        <div class="icon-arrow icon-arrow-right"><svg width="50" height="50" viewBox="0 0 24 24">
-            <use xlink:href="#arrow-right"></use>
-          </svg></div>
-      </div>
-
-            {% endif %}
-
+        <div class="card-body">
+          <form method="POST" action="{% url 'shop:search' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              <input type="text" class="form-control" id="exampleFormControlInput1"
+                     placeholder="کلمات مرتبط با کالا یا نام کالا" name="searched"
+                     style="border-radius:8px;">
+            </div>
+            <button type="submit" class="btn" style="background:#870000; color:white; border-radius:8px; padding:8px 20px;">
+              پیدا کن
+            </button>
+          </form>
         </div>
       </div>
     </div>
 
+    <!-- Search Results -->
+    {% if searched %}
+    <div class="row">
+      <div class="swiper main-swiper py-4" data-aos="fade-up" data-aos-delay="400">
+        <div class="swiper-wrapper d-flex border-animation-left">
 
+          {% for product in searched %}
+          <div class="swiper-slide">
+            <div class="banner-item image-zoom-effect p-3"
+                 style="background:#fff; border-radius:16px; border:1px solid #eee; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
 
+              <!-- Product Image -->
+              <div class="image-holder mb-3">
+                <a href="{% url 'shop:products_detail' product.collection.id product.id %}">
+                  <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded"
+                       >
+                </a>
+              </div>
 
+              <!-- Product Content -->
+              <div class="banner-content">
+                <h5 class="element-title text-uppercase mb-2">
+                  <a href="{% url 'shop:products_detail' product.collection.id product.id %}"
+                     style="color:#870000; font-weight:bold; text-decoration:none;">
+                    {{ product.name }}
+                  </a>
+                </h5>
 
-  </section>
+                {% if product.description %}
+                <p style="color:#555; font-size:0.9rem;">{{ product.description }}</p>
+                {% endif %}
+
+                {% if product.is_available %}
+                <span class="badge" style="background:#870000; color:white; border-radius:8px; padding:5px 12px;">
+                  موجود
+                </span>
+                {% else %}
+                <span class="badge" style="background:#999; color:white; border-radius:8px; padding:5px 12px;">
+                  ناموجود
+                </span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+
+      <!-- Navigation Arrows -->
+      <div class="icon-arrow icon-arrow-left">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="#870000">
+          <use xlink:href="#arrow-left"></use>
+        </svg>
+      </div>
+      <div class="icon-arrow icon-arrow-right">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="#870000">
+          <use xlink:href="#arrow-right"></use>
+        </svg>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
 
 {% endblock %}

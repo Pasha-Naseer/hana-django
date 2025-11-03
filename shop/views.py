@@ -54,14 +54,29 @@ def blog_detail(request, blog_id):
 
 
 def shop_index(request):
-    latest_collection_list = Collection.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
+    latest_collection_list = Collection.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")
     famous_product_list = Product.objects.filter(Q(name__icontains='Simple') | Q(name__icontains='Nivea') |
                                                  Q(name__icontains='Loreal') | Q(name__icontains='Euphoria'))[:4]
     blog_list = Blog.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:3]
     context = {"latest_collection_list": latest_collection_list,
                'famous_product_list': famous_product_list,
                'blog_list': blog_list}
-    return render(request, "shop/shop_index.html", context)
+
+    if request.method == 'POST':
+        searched = request.POST['searched']
+        searched = Product.objects.filter(Q(name__icontains=searched) | Q(description__icontains=searched) | Q(collection__name__icontains=searched) | Q(collection__description__icontains=searched))
+        if not searched:
+            messages.success(request, "کالایی با مشخصات مذکور موجود نیست!")
+            return render(request, "shop/shop_index.html", context)
+        else:
+            context = {"latest_collection_list": latest_collection_list,
+                       'famous_product_list': famous_product_list,
+                       'blog_list': blog_list,
+                       'searched': searched,
+                       }
+            return render(request, 'shop/shop_index.html', context)
+    else:
+        return render(request, 'shop/shop_index.html', context)
 
 
 def products_index(request, collection_id):
@@ -165,7 +180,8 @@ class UserRegisterView(View):
             }
             messages.success(request, 'کدی برای شما ارسال شد', 'success')
             return redirect('shop:verify_code')
-        return redirect('shop:shop_index')
+        messages.success(request,"فرم خود را بازبینی کنید", 'success')
+        return redirect('shop:register')
 
 
 # is
@@ -256,7 +272,7 @@ def search(request):
         searched = request.POST['searched']
         searched = Product.objects.filter(Q(name__icontains=searched) | Q(description__icontains=searched) | Q(collection__name__icontains=searched) | Q(collection__description__icontains=searched))
         if not searched:
-            messages.success(request, "Product does not exist")
+            messages.success(request, "کالایی با مشخصات مذکور موجود نیست!")
             return render(request, 'shop/search.html', )
         else:
             return render(request, 'shop/search.html', {'searched': searched})

@@ -32,7 +32,7 @@ def cart_add(request):
         cart_quantity = cart.__len__()
         # return response
         response = JsonResponse({'qty': cart_quantity})
-        messages.success(request, "کالا به ثبت خرید اضافه شد")
+        messages.success(request, "کالا به سبد خرید اضافه شد")
         return response
 
              

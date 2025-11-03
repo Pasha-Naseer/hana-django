@@ -1,62 +1,102 @@
 {% extends 'shop/base.html' %}
-
+{% load static %}
 {% block content %}
+<section id="billboard" class="py-5" style="background:#fff;">
+  <div class="container text-center">
 
-<section id="billboard" class="bg-light py-5">
-    <div class="container">
-      <div class="row justify-content-center">
-            <div class="card" style="width: 18rem; padding:0px;" >
-          <img class="card-img" src="{{ collection.image.url }}" alt="Card image cap">
-            </div>
-        <h1 class="section-title text-center mt-4" data-aos="fade-up">{{ collection.name }}</h1>
-        <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
-
-            <p>{{ collection.description }}</p>
-            <br/>
-        </div>
-      </div>
-<div class="row">
-        <div class="swiper main-swiper py-4" data-aos="fade-up" data-aos-delay="600">
-          <div class="swiper-wrapper d-flex border-animation-left">
-            {% for product in products_list %}
-            <div class="swiper-slide">
-              <div class="banner-item image-zoom-effect">
-                <div class="image-holder">
-                  <a href="#">
-                    <img src="{{ product.image.url }}" alt="product" class="img-fluid">
-                  </a>
-                </div>
-                <div class="banner-content py-4">
-                  <h5 class="element-title text-uppercase">
-                    <a href="{% url 'shop:products_detail' product.collection.id product.id %}" class="item-anchor">{{ product.name }}</a>
-                  </h5>
-                    {% if product.description %}
-                  <p>{{ product.description }}</p>
-                    {% endif %}
-                    {% if product.is_available %}
-                  <div class="btn-left">
-                    <h6>موجود</h6>
-                  </div>
-                    {% else %}
-                    <div class="btn-left">
-                        <h6>ناموجود</h6>
-                  </div>
-                    {% endif %}
-                </div>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-          <div class="swiper-pagination"></div>
-        </div>
-        <div class="icon-arrow icon-arrow-left"><svg width="50" height="50" viewBox="0 0 24 24">
-            <use xlink:href="#arrow-left"></use>
-          </svg></div>
-        <div class="icon-arrow icon-arrow-right"><svg width="50" height="50" viewBox="0 0 24 24">
-            <use xlink:href="#arrow-right"></use>
-          </svg></div>
+    <!-- Collection Card -->
+    <div class="row justify-content-center mb-4">
+      <div class="card shadow-sm border-0" style="width:18rem; border-radius:16px; overflow:hidden;" data-aos="zoom-in">
+        <img class="card-img-top" src="{{ collection.image.url }}" alt="{{ collection.name }}">
       </div>
     </div>
+
+    <!-- Collection Title -->
+    <h1 class="section-title mb-3" data-aos="fade-up"
+        style="color:#870000; font-family:'VAZIRmatn' !important; font-weight:bold; font-size:2rem;">
+      {{ collection.name }}
+    </h1>
+
+    <!-- Collection Description -->
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center" data-aos="fade-up" data-aos-delay="200">
+        <p style="color:#444; font-size:1rem; line-height:1.7;">{{ collection.description }}</p>
+      </div>
+    </div>
+
+    <!-- Swiper for Products -->
+<div class="container py-4 mt-5" data-aos="fade-up" data-aos-delay="400">
+  <div class="row justify-content-center g-4">
+    {% for product in products_list %}
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="collection-card p-3 text-center">
+          <!-- Product Image -->
+          <div class="collection-image mb-3">
+            <a href="{% url 'shop:products_detail' product.collection.id product.id %}">
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+            </a>
+          </div>
+
+          <!-- Product Content -->
+          <div class="collection-content">
+            <h5 class="element-title text-uppercase mb-2">
+              <a href="{% url 'shop:products_detail' product.collection.id product.id %}"
+                 style="color:#6B3E26; font-size:1rem; font-weight:bold; text-decoration:none;">
+                {{ product.name }}
+              </a>
+            </h5>
+
+            {% if product.description %}
+              <p style="color:#555; font-size:0.9rem;">{{ product.description }}</p>
+            {% endif %}
+          </div>
+
+          <!-- Availability Badge -->
+          {% if product.is_available %}
+            <span class="badge" style="background:#B8860B; color:white; border-radius:10px; padding:6px 12px;">
+              موجود
+            </span>
+          {% else %}
+            <span class="badge" style="background:#999; color:white; border-radius:10px; padding:6px 12px;">
+              ناموجود
+            </span>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+<!--
+
+    <div class="icon-arrow icon-arrow-left">
+      <img src="{% static 'images/red-arrow-left.png' %}" alt="Prev">
+    </div>
+    <div class="icon-arrow icon-arrow-right">
+      <img src="{% static 'images/red-arrow-right.png' %}" alt="Next">
+    </div>
+
+
+  </div>
+
+<div class="row mt-4">
+  <div class="col text-center" data-aos="fade-up" data-aos-delay="500">
+    <h4 style="
+        color:#870000;
+        font-family:'VAZIRmatn' !important;
+        font-weight:bold;
+        font-size:1.2rem;
+        display:inline-block;
+        padding:6px 18px;
+        border:2px solid #870000;
+        border-radius:30px;
+        background:#fff;
+        box-shadow:0 3px 10px rgba(0,0,0,0.1);
+      ">
+      ورق بزنید
+    </h4>
+  </div>
+</div>
+-->
 </section>
 
 {% endblock %}

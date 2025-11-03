@@ -9,8 +9,24 @@ from .models import User, OtpCode
 from django.contrib.auth.models import Group
 
 
-admin.site.register(Collection)
-admin.site.register(Product)
+class ProductInline(admin.TabularInline):
+    model = Product
+    fields = ('name',)  # show only product name
+    readonly_fields = ('name',)  # make it uneditable in inline
+    extra = 0
+    show_change_link = True  # makes the name clickable (links to product edit page)
+
+
+@admin.register(Collection)
+class CollectionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'is_available', 'pub_date')
+    inlines = [ProductInline]
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('name', 'collection', 'price', 'is_available', 'pub_date')
+    list_filter = ('collection', 'is_available')
 admin.site.register(Customer)
 admin.site.register(Order)
 
