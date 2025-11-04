@@ -16,8 +16,8 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 class Blog(models.Model):
     title = models.CharField(max_length=200)
     blog_image = models.ImageField()
-    body = models.TextField
-    # body = models.TextField(max_length=150000)
+    body = models.TextField(max_length=20000000, null=True)
+
     pub_date = models.DateTimeField("creation date")
     body_summary = models.TextField(max_length=115, null=True)
 
