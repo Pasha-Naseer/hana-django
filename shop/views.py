@@ -70,7 +70,7 @@ def shop_index(request):
         if not searched:
 
             messages.success(request, "کالایی با مشخصات مذکور موجود نیست!")
-            return render(request, "shop/shop_index.html", context)
+            return render(request, "shop/index.html", context)
         else:
             context = {"latest_collection_list": latest_collection_list,
                        'famous_product_list': famous_product_list,
@@ -78,9 +78,9 @@ def shop_index(request):
                        'comments': comments,
                        'searched': searched,
                        }
-            return render(request, 'shop/shop_index.html', context)
+            return render(request, 'shop/index.html', context)
     else:
-        return render(request, 'shop/shop_index.html', context)
+        return render(request, 'shop/index.html', context)
 
 
 def products_index(request, collection_id):
