@@ -1442,3 +1442,71 @@
 </html>
 </body>
 </html>
+
+<!-- search -->
+    <!-- Search Results -->
+    {% if searched %}
+    <div class="row">
+      <div class="swiper main-swiper py-4" data-aos="fade-up" data-aos-delay="400">
+        <div class="swiper-wrapper d-flex border-animation-left">
+
+          {% for product in searched %}
+          <div class="swiper-slide">
+            <div class="banner-item image-zoom-effect p-3"
+                 style="background:#fff; border-radius:16px; border:1px solid #eee; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+
+              <!-- Product Image -->
+              <div class="image-holder mb-3">
+                <a href="{% url 'shop:products_detail' product.collection.id product.id %}">
+                  <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded"
+                       >
+                </a>
+              </div>
+
+              <!-- Product Content -->
+              <div class="banner-content">
+                <h5 class="element-title text-uppercase mb-2">
+                  <a href="{% url 'shop:products_detail' product.collection.id product.id %}"
+                     style="color:#870000; font-weight:bold; text-decoration:none;">
+                    {{ product.name }}
+                  </a>
+                </h5>
+
+                {% if product.description %}
+                <p style="color:#555; font-size:0.9rem;">{{ product.description }}</p>
+                {% endif %}
+
+                {% if product.is_available %}
+                <span class="badge" style="background:#870000; color:white; border-radius:8px; padding:5px 12px;">
+                  موجود
+                </span>
+                {% else %}
+                <span class="badge" style="background:#999; color:white; border-radius:8px; padding:5px 12px;">
+                  ناموجود
+                </span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+
+      <!-- Navigation Arrows -->
+      <div class="icon-arrow icon-arrow-left">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="#870000">
+          <use xlink:href="#arrow-left"></use>
+        </svg>
+      </div>
+      <div class="icon-arrow icon-arrow-right">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="#870000">
+          <use xlink:href="#arrow-right"></use>
+        </svg>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</section>

@@ -22,7 +22,7 @@
                 {{ order.full_name }}<br/>
                 <pre>{{ order.shipping_address }}</pre><br/>
                 {% for item in items %}
-                <h6>{{ item.product }}</h6><h6>{{ item.quantity }} عدد</h6><h6>{{ item.price|intcomma }}T</h6><br/>
+                <h6>{{ item.product }}</h6><h6>{{ item.quantity }} عدد</h6><h6>کد: {{item.product_code}}</h6><h6>{{ item.price|intcomma }}T</h6><br/>
 
                 {% endfor %}
                 <br/><br/>

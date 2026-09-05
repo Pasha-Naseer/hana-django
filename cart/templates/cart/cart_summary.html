@@ -2,10 +2,14 @@
 {% load humanize %}
 {% block content %}
 
-<section class="cart-section py-3" style="background: linear-gradient(135deg, #ff4b5c, #d90429); font-size: 0.9rem;">
+<section class="cart-section py-3"
+         style="background: linear-gradient(135deg, #ff4b5c, #d90429); font-size: 0.9rem;">
+
   <div class="container text-white">
     <div class="row justify-content-center">
-      <h3 class="section-title text-center mt-3" data-aos="fade-up">سبد خرید</h3>
+      <h3 class="section-title text-center mt-3" data-aos="fade-up">
+        سبد خرید
+      </h3>
       <div class="col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
         <p class="fw-semibold small">خریدهای خود را بررسی کنید</p>
       </div>
@@ -13,52 +17,75 @@
   </div>
 
   <div class="container mt-3">
-    {% if cart_products %}
-      {% for product in cart_products %}
+
+    {% if cart_items %}
+      {% for item in cart_items %}
+        {% with product=item.product code=item.code %}
+
         <div class="row justify-content-center mb-3">
           <div class="col-md-6">
-            <div class="card shadow-sm border-0 rounded-3 overflow-hidden" style="font-size: 0.85rem;">
+
+            <div class="card shadow-sm border-0 rounded-3 overflow-hidden"
+                 style="font-size: 0.85rem;">
+
               <img class="card-img-top"
-     src="{{ product.image.url }}"
-     alt="{{ product.name }}"
-     style="max-height: 150px; object-fit: contain; background: #fff;">
+                   src="{{ product.image.url }}"
+                   alt="{{ product.name }}"
+                   style="max-height:150px; object-fit:contain; background:#fff;">
 
               <div class="card-body text-center py-3 px-2">
 
-                <h5 class="card-title mb-2">{{ product.name }}</h5>
+                <!-- Product name -->
+                <h5 class="card-title mb-1">{{ product.name }}</h5>
 
+                <!-- Product code (if exists) -->
+                {% if code %}
+                  <p class="small text-warning mb-1">
+                    کد محصول: {{ code.code }}
+                  </p>
+                {% endif %}
+
+                <!-- Availability -->
                 {% if product.is_available %}
                   <span class="badge bg-success px-2 py-1 mb-2">موجود</span>
                 {% else %}
                   <span class="badge bg-secondary px-2 py-1 mb-2">ناموجود</span>
                 {% endif %}
 
+                <!-- Description -->
                 {% if product.description %}
-                  <p class="text-light small">{{ product.description }}</p>
+                  <p class="text-light small mb-2">
+                    {{ product.description }}
+                  </p>
                 {% endif %}
 
-                <p class="mt-2 mb-1">قیمت: {{ product.price|intcomma }}T</p>
+                <!-- Price -->
+                <p class="mt-2 mb-1">
+                  قیمت: {{ product.price|intcomma }} T
+                </p>
 
                 {% if product.has_discount %}
-                  <p class="text-danger small mb-1">تخفیف: {{ product.discount }}%</p>
-                  <p class="fw-semibold small">قیمت نهایی: {{ product.price_with_discount|intcomma }}T</p>
+                  <p class="text-danger small mb-1">
+                    تخفیف: {{ product.discount }}%
+                  </p>
+                  <p class="fw-semibold small">
+                    قیمت نهایی:
+                    {{ product.price_with_discount|intcomma }} T
+                  </p>
                 {% else %}
                   <p class="text-muted small mb-1">تخفیف ندارد</p>
                 {% endif %}
 
+                <!-- Quantity selector -->
                 <div class="row justify-content-center align-items-center mt-3">
                   <div class="col-auto">
                     <p class="mb-1">تعداد</p>
                   </div>
                   <div class="col-auto">
-                    <select class="form-select form-select-sm" id="select{{ product.id }}" style="width: 70px;">
-                      <option selected>
-                        {% for key, value in quantities.items %}
-                          {% if key == product.id|slugify %}
-                            {{ value }}
-                          {% endif %}
-                        {% endfor %}
-                      </option>
+                    <select class="form-select form-select-sm"
+                            id="select{{ item.key }}"
+                            style="width:70px;">
+                      <option selected>{{ item.quantity }}</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
@@ -68,44 +95,65 @@
                   </div>
                 </div>
 
+                <!-- Actions -->
                 <div class="mt-3">
-                  <button type="button" data-index="{{ product.id }}" class="btn btn-outline-secondary btn-sm update-cart rounded-pill px-3">
+                  <button type="button"
+                          data-index="{{ item.key }}"
+                          class="btn btn-outline-secondary btn-sm update-cart rounded-pill px-3">
                     ویرایش
                   </button>
-                  <button type="button" data-index="{{ product.id }}" class="btn btn-outline-danger btn-sm delete-product rounded-pill px-3 ms-1">
+
+                  <button type="button"
+                          data-index="{{ item.key }}"
+                          class="btn btn-outline-danger btn-sm delete-product rounded-pill px-3 ms-1">
                     حذف
                   </button>
                 </div>
 
               </div>
             </div>
+
           </div>
         </div>
+
+        {% endwith %}
       {% endfor %}
 
+      <!-- Cart total -->
       <div class="text-center mt-4">
-        <h5 class="text-white mb-2">مجموع: {{ totals|intcomma }}T</h5>
-        <a href="{% url 'payment:checkout' %}" class="btn btn-light btn-sm rounded-pill px-3 fw-semibold">
+        <h5 class="text-white mb-2">
+          مجموع: {{ totals|intcomma }} T
+        </h5>
+
+        <a href="{% url 'payment:checkout' %}"
+           class="btn btn-light btn-sm rounded-pill px-3 fw-semibold">
           بازبینی نهایی
         </a>
       </div>
 
     {% else %}
-      <h5 class="text-center text-light mt-4">سبد خرید خالی است</h5>
+      <h5 class="text-center text-light mt-4">
+        سبد خرید خالی است
+      </h5>
     {% endif %}
+
   </div>
 </section>
+
+<!-- ================== AJAX ================== -->
 
 <script>
 $(document).on('click', '.update-cart', function(e){
     e.preventDefault();
-    var productid = $(this).data('index');
+
+    let cartKey = $(this).data('index');
+
     $.ajax({
         type: 'POST',
-        url: '{% url 'cart:cart_update' %}',
+        url: '{% url "cart:cart_update" %}',
         data: {
-            product_id: productid,
-            product_qty: $('#select' + productid + ' option:selected').text(),
+            product_id: cartKey,
+            product_qty: $('#select' + cartKey + ' option:selected').text(),
             csrfmiddlewaretoken: '{{ csrf_token }}',
             action: 'post'
         },
@@ -117,9 +165,10 @@ $(document).on('click', '.update-cart', function(e){
 
 $(document).on('click', '.delete-product', function(e){
     e.preventDefault();
+
     $.ajax({
         type: 'POST',
-        url: '{% url 'cart:cart_delete' %}',
+        url: '{% url "cart:cart_delete" %}',
         data: {
             product_id: $(this).data('index'),
             csrfmiddlewaretoken: '{{ csrf_token }}',

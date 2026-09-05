@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Collection, Product, Customer, Order, Profile, Blog
+from .models import Collection, Product, Customer, Order, Profile, Blog, ProductCode, Comment
 # Used2B
 # from django.contrib.auth.models import User
 # is
@@ -7,6 +7,9 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserCreationForm, UserChangeForm
 from .models import User, OtpCode
 from django.contrib.auth.models import Group
+
+admin.site.register(ProductCode)
+admin.site.register(Comment)
 
 
 class ProductInline(admin.TabularInline):

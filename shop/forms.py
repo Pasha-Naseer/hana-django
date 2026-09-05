@@ -228,3 +228,10 @@ class UserRegistrationForm(forms.Form):
 # is
 class VerifyCodeForm(forms.Form):
     code = forms.IntegerField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Verify Code'}), required=True)
+
+
+class CommentForm(forms.Form):
+    text = forms.CharField(max_length=500, label="", widget=forms.TextInput(attrs={'class': "form-control form-control-lg",
+                                                                                   'placeholder': 'comment',
+                                                                                   "rows": 6,
+                                                                                   'style': "resize: vertical;"}))

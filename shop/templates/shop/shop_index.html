@@ -3,7 +3,7 @@
 {% block content %}
 
 <body class="homepage">
-  <div class="preloader text-white fs-6 text-uppercase overflow-hidden"></div>
+  v>
   <section id="billboard" class="py-5" style="background:#fff;">
   <div class="container text-center">
 
@@ -28,7 +28,7 @@
           <!-- Image -->
           <div class="collection-image mb-3">
             <a href="{% url 'shop:products_index' collection.id %}">
-              <img src="{{ collection.image.url }}" alt="product" class="img-fluid rounded">
+              <img src="{{ collection.image.url }}" alt="{{collection.name}}" class="img-fluid rounded">
             </a>
           </div>
 
@@ -362,50 +362,45 @@
       ما عاشق پیشنهاداتتون هستیم
     </h3>
   </div>
-
   <div class="swiper testimonial-swiper overflow-hidden my-5">
     <div class="swiper-wrapper d-flex">
 
+      {% for comment in comments %}
       <div class="swiper-slide">
         <div class="testimonial-item text-center" style="background:#fff; color:#b30000; border-radius:15px; padding:25px; margin:10px; box-shadow:0 6px 15px rgba(0,0,0,0.2);">
           <blockquote>
-            <p style="font-size:1.1rem; font-style:italic;">"استفاده از محصولات هانا، یکی از بهترین تجربه های خرید من بود"</p>
-            <div class="review-title text-uppercase" style="margin-top:15px; font-weight:bold;">لیدا فرخی</div>
+            <p style="font-size:1.1rem; font-style:italic;">{{ comment.text }}</p>
+            <div class="review-title text-uppercase" style="margin-top:15px; font-weight:bold;">{{ comment.user.first_name }}</div>
           </blockquote>
         </div>
       </div>
-
-      <div class="swiper-slide">
-        <div class="testimonial-item text-center" style="background:#fff; color:#b30000; border-radius:15px; padding:25px; margin:10px; box-shadow:0 6px 15px rgba(0,0,0,0.2);">
-          <blockquote>
-            <p style="font-size:1.1rem; font-style:italic;">"آقا عطا برای ما یک دوست ارزشمند و یک فروشنده فوق العاده قابل اعتماد است"</p>
-            <div class="review-title text-uppercase" style="margin-top:15px; font-weight:bold;">سمانه گشتاسبی</div>
-          </blockquote>
-        </div>
-      </div>
-
-      <div class="swiper-slide">
-        <div class="testimonial-item text-center" style="background:#fff; color:#b30000; border-radius:15px; padding:25px; margin:10px; box-shadow:0 6px 15px rgba(0,0,0,0.2);">
-          <blockquote>
-            <p style="font-size:1.1rem; font-style:italic;">"قبل اینکه با هانا آشنا بشم همیشه از امتحان محصولات جدید میترسیدم ولی با استفاده از پیشنهادات هانا کیفیت انتخابام بهتر شد"</p>
-            <div class="review-title text-uppercase" style="margin-top:15px; font-weight:bold;">ماهرخ افشاری</div>
-          </blockquote>
-        </div>
-      </div>
-
-      <div class="swiper-slide">
-        <div class="testimonial-item text-center" style="background:#fff; color:#b30000; border-radius:15px; padding:25px; margin:10px; box-shadow:0 6px 15px rgba(0,0,0,0.2);">
-          <blockquote>
-            <p style="font-size:1.1rem; font-style:italic;">"انتظار نداشتم که اینهمه با حوصله و خوب رفتار کنن"</p>
-            <div class="review-title text-uppercase" style="margin-top:15px; font-weight:bold;">سهیلا کاظمی</div>
-          </blockquote>
-        </div>
-      </div>
+      {% endfor %}
 
     </div>
   </div>
 
   <div class="testimonial-swiper-pagination d-flex justify-content-center mb-5"></div>
+  <div style="text-align: center; margin-top: 20px;">
+  <a href="{% url 'shop:comment' %}"
+     style="
+       display: inline-block;
+       padding: 10px 26px;
+       background-color: #ffffff;
+       color: #b00020;
+       text-decoration: none;
+       font-weight: 700;
+       border-radius: 30px;
+       border: 1px solid #e5e5e5;
+       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+       transition: all 0.25s ease;
+     "
+     onmouseover="this.style.backgroundColor='#b00020'; this.style.color='#fff'; this.style.boxShadow='0 6px 18px rgba(176,0,32,0.35)'"
+     onmouseout="this.style.backgroundColor='#fff'; this.style.color='#b00020'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'"
+  >
+    ثبت کامنت
+  </a>
+</div>
+
 </section>
 
 

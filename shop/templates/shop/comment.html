@@ -1,0 +1,26 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+    <!-- Search Card -->
+    <div class="col-md-6 mx-auto mb-5">
+      <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-header" style="background:#870000; color:white; font-weight:bold;">
+          کامنت
+        </div>
+        <div class="card-body">
+          <form method="POST" action="{% url 'shop:comment' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              {{ form.as_p }}
+            </div>
+            <button type="submit" class="btn" style="background:#870000; color:white; border-radius:8px; padding:8px 20px;">
+              ثبت
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+{% endblock %}

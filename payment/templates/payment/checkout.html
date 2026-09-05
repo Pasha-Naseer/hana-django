@@ -33,13 +33,24 @@
                 <span class="text-danger">ناموجود</span>
               {% endif %}
             </p>
-            <small class="text-muted">تعداد:
-              {% for key, value in quantities.items %}
-                {% if key == product.id|slugify %}
-                  {{ value }}
-                {% endif %}
-              {% endfor %}
-            </small>
+
+    <small class="text-muted">کد محصول:
+      {% for key, value in codes_map.items %}
+        {% if key == product.id%}
+        {{ value }}
+      {% endif %}
+      {% empty %}
+        ندارد
+      {% endfor %}
+    </small>
+<br/>
+    <small class="text-muted">تعداد:
+      {% for key, qty in quantities.items %}
+        {% if key|stringformat:"s"|slice:":1" == product.id|stringformat:"s" %}
+          {{ qty }}
+        {% endif %}
+      {% endfor %}
+    </small>
           </div>
         {% endfor %}
 

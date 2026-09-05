@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'payment.apps.PaymentConfig',
     'django_ckeditor_5',
-'django.contrib.humanize',
+    'django.contrib.humanize',
     #'ckeditor_uploader'
 ]
 
@@ -79,18 +79,6 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': "hanaproject_db",
-        'USER': 'root',
-        'PASSWORD': 'M@d124F@23mt',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

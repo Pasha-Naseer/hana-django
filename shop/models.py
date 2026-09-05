@@ -120,13 +120,16 @@ class Collection(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+
 # موجودی پرابلم
 class Product(models.Model):
     collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
     description = models.TextField(max_length=2000, null=True, blank=True)
+    description_long = models.TextField(max_length=5000, null=True, blank=True)
+    quantity = models.IntegerField(null=True, default=0)
     name = models.CharField(max_length=200)
     price = models.DecimalField(default=0, decimal_places=0, max_digits=10)
-    is_available = models.BooleanField(default=False)
+    is_available = models.BooleanField(default=True)
     image = models.ImageField(blank=True, default="fallback.png")
     help_images = models.BooleanField(default=False)
     image_1 = models.ImageField(blank=True, null=True, default='fallback.png')
@@ -135,6 +138,7 @@ class Product(models.Model):
     has_discount = models.BooleanField(default=False)
     discount = models.DecimalField(null=True, blank=True, decimal_places=0, max_digits=2)
     pub_date = models.DateTimeField("creation date")
+    has_code = models.BooleanField(default=False)
 
     def price_with_discount(self):
         amount = self.price - self.price * self.discount / 100
@@ -142,6 +146,14 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.name} از {self.collection.name}"
+
+
+class ProductCode(models.Model):
+    code = models.IntegerField()
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="codes")
+
+    def __str__(self):
+        return f"{self.product.name} - {self.code}"
 
 
 class Order(models.Model):
@@ -157,3 +169,11 @@ class Order(models.Model):
         return f"{self.product} by {self.customer}"
 
 
+class Comment(models.Model):
+    text = models.TextField(max_length=400)
+    date_submitted = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    confirmed = models.BooleanField(default=False, null=True)
+
+    def __str__(self):
+        return self.user.username

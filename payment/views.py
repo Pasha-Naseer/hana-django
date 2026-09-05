@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect
 from cart.cart import Cart
 from .forms import ShippingForm, PaymentForm
 from .models import ShippingAddress, Order, OrderItem
-from shop.models import Profile
+from shop.models import Profile, ProductCode
 from django.contrib import messages
 from django.views import View
 from django.conf import settings
+from django.db.models import F
 import requests
 import json
 import time
@@ -13,13 +14,12 @@ from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 # used2B
 
 # from django.contrib.auth.models import User
-from shop.models import Product
 import datetime
 
 # is
 # ZARINPAL
 
-from shop.models import User
+from shop.models import User, Product
 
 
 # was is_superuser
@@ -252,41 +252,10 @@ class OrderPayView(View):
 
         cart = Cart(request)
         totals = cart.cart_total()
-
-        data = {
-            'MerchantID': settings.MERCHANT,
-            'Amount': int(totals),
-            'Description': description,
-            #"Phone": phone,
-            'CallbackURL': CallbackURL,
-
-        }
-        data = json.dumps(data)
-
-        # set content length by data
-        headers = {'content-type': 'application/json', 'content-length': str(len(data))}
-        try:
-            response = requests.post(ZP_API_REQUEST, data=data,headers=headers, timeout=10)
-
-
-            if response.status_code == 200:
-                response = response.json()
-
-                if response['Status'] == 100:
-                    my_shipping = request.POST
-                    request.session['my_shipping'] = my_shipping
-                    # return JsonResponse({'status': True, 'url': ZP_API_STARTPAY + str(response['data']['authority']), 'authority': response['data']['authority']})
-                    return HttpResponseRedirect(ZP_API_STARTPAY + str(response['Authority']))
-                else:
-                    return JsonResponse({'status': False, 'code': str(response['Authority'])})
-
-            return HttpResponse(response)
-
-        except requests.exceptions.Timeout:
-            return JsonResponse({'status': False, 'code': 'timeout'})
-        except requests.exceptions.ConnectionError:
-            return JsonResponse({'status': False, 'code': 'connection error'})
-
+        my_shipping = request.POST
+        request.session['my_shipping'] = my_shipping
+        return redirect("payment:payment_verify"
+        )
 
 
 
@@ -314,107 +283,128 @@ class OrderVerifyView(View):
         cart_products = cart.get_prods
         quantities = cart.get_quants
         totals = cart.cart_total()
-        print(request.GET)
-        t_status = request.GET['Status']
-        t_authority = request.GET['Authority']
-        if request.GET['Status'] == 'OK':
-            data = {
-                    "MerchantID": settings.MERCHANT,
-                    "Amount": int(totals),
-                    "Authority": t_authority,
-                }
-            data = json.dumps(data)
-            headers = {'content-type': 'application/json', 'content-length': str(len(data))}
-            response = requests.post(ZP_API_VERIFY, data=data, headers=headers)
 
-            my_shipping = request.session.get('my_shipping')
-            print(request.session.get('my_shipping'))
-            # gather order info
+        my_shipping = request.session.get('my_shipping')
+        # print(request.session.get('my_shipping'))
+        # gather order info
 
-            # create shipping address from session info
-            full_name = my_shipping['shipping_full_name']
-            email = my_shipping['shipping_phone']
-            shipping_address = f"{my_shipping['shipping_address1']}\n{my_shipping['shipping_address2']}\n{my_shipping['shipping_city']}\n{my_shipping['shipping_state']}\n{my_shipping['shipping_zipcode']}\n"
-            amount_paid = totals
+        # create shipping address from session info
+        full_name = my_shipping['shipping_full_name']
+        email = my_shipping['shipping_phone']
+        shipping_address = f"{my_shipping['shipping_address1']}\n{my_shipping['shipping_address2']}\n{my_shipping['shipping_city']}\n{my_shipping['shipping_state']}\n{my_shipping['shipping_zipcode']}\n"
+        amount_paid = totals
+        # create order
+        if request.user.is_authenticated:
+            user = request.user
             # create order
-            if request.user.is_authenticated:
-                user = request.user
-                # create order
-                create_order = Order(user=user, full_name=full_name, email=email, shipping_address=shipping_address,
-                                     amount_paid=amount_paid)
-                create_order.save()
+            create_order = Order(user=user, full_name=full_name, email=email, shipping_address=shipping_address,
+                                 amount_paid=amount_paid)
+            create_order.save()
 
-                # Get product info
-                order_id = create_order.pk
-                for product in cart_products():
-                    product_id = product.id
-                    # get product price
-                    if product.is_available:
-                        if product.has_discount:
-                            price = product.price_with_discount()
-                        else:
-                            price = product.price
+
+            # Get product info
+            order_id = create_order.pk
+            for product in cart_products():
+
+                product_id = product.id
+
+
+                # get product price
+                if product.quantity:
+                    if product.has_discount:
+                        price = product.price_with_discount()
                     else:
-                        # ???????????????
                         price = product.price
+                else:
+                    # ???????????????
+                    price = product.price
 
-                    # get quantity
-                    for key, value in quantities().items():
-                        if int(key) == product.id:
+                # get quantity
+                for key, value in quantities().items():
+                    if int(key.split("-")[0]) == product.id:  #importanta
+                        if cart.get_codes(product.id):
+                            code = ProductCode.objects.get(pk=int(cart.get_codes(product.id)[0]))
+                            # create OrderItem
+                            create_order_item = OrderItem(order_id=order_id, product_id=product_id, user=user,
+                                                          quantity=value, price=price, product_code=code)
+                            # create_order_item.save()
+                            # selected_product = Product.objects.get(pk=product_id)
+                            # selected_product.quantity = F("quantity") - value
+                            # selected_product.save()
+                        else:
                             # create OrderItem
                             create_order_item = OrderItem(order_id=order_id, product_id=product_id, user=user,
                                                           quantity=value, price=price)
-                            create_order_item.save()
+                        create_order_item.save()
+                        selected_product = Product.objects.get(pk=product_id)
+                        selected_product.quantity = F("quantity") - value
+                        selected_product.save()
 
-                # clear cart
-                for key in list(request.session.keys()):
-                    if key == 'session_key':
-                        # delete key
-                        del request.session[key]
-                # Delete cart from database (old cart field)
-                current_user = Profile.objects.filter(user__id=request.user.id)
-                # Delete shopping un database (old_cart fields)
-                current_user.update(old_cart="")
 
-                messages.success(request, "سفارش به ثبت رسید")
+            # clear cart
+            for key in list(request.session.keys()):
+                if key == 'session_key':
+                    # delete key
+                    del request.session[key]
+            # Delete cart from database (old cart field)
+            current_user = Profile.objects.filter(user__id=request.user.id)
+            # Delete shopping un database (old_cart fields)
+            current_user.update(old_cart="")
 
-                return redirect('shop:shop_index')
-            else:
-                # not logged in
-                create_order = Order(full_name=full_name, email=email, shipping_address=shipping_address,
-                                     amount_paid=amount_paid)
-                create_order.save()
-                # Get product info
-                order_id = create_order.pk
-                for product in cart_products():
-                    product_id = product.id
-                    # get product price
-                    if product.is_available:
-                        if product.has_discount:
-                            price = product.price_with_discount()
-                        else:
-                            price = product.price
+            messages.success(request, "سفارش به ثبت رسید")
+
+            return redirect('shop:shop_index')
+        else:
+            # not logged in
+            create_order = Order(full_name=full_name, email=email, shipping_address=shipping_address,
+                                 amount_paid=amount_paid)
+            create_order.save()
+            # Get product info
+            order_id = create_order.pk
+            for product in cart_products():
+                product_id = product.id
+                # get product price
+                if product.quantity:
+                    if product.has_discount:
+                        price = product.price_with_discount()
                     else:
-                        # ???????????????
                         price = product.price
+                else:
+                    # ???????????????
+                    price = product.price
 
-                    # get quantity
-                    for key, value in quantities().items():
-                        if int(key) == product.id:
+                # get quantity
+                for key, value in quantities().items():
+                    if int(key) == product.id:
+                        if cart.get_codes(product.id):
+                            code = ProductCode.objects.get(pk=int(cart.get_codes(product.id)[0]))
+                            # create OrderItem
+                            create_order_item = OrderItem(order_id=order_id, product_id=product_id,
+                                                          quantity=value, price=price, product_code=code)
+                            # create_order_item.save()
+                            # selected_product = Product.objects.get(pk=product_id)
+                            # selected_product.quantity = F("quantity") - value
+                            # selected_product.save()
+                        else:
                             # create OrderItem
                             create_order_item = OrderItem(order_id=order_id, product_id=product_id,
                                                           quantity=value, price=price)
-                            create_order_item.save()
+                        create_order_item.save()
+                        selected_product = Product.objects.get(pk=product_id)
+                        selected_product.quantity = F("quantity") - value
+                        selected_product.save()
 
-                for key in list(request.session.keys()):
-                    if key == 'session_key':
-                        # delete key
-                        del request.session[key]
+            for key in list(request.session.keys()):
+                if key == 'session_key':
+                    # delete key
+                    del request.session[key]
 
-                messages.success(request, "سفارش به ثبت رسید")
+            messages.success(request, "سفارش به ثبت رسید")
 
-                return redirect('shop:shop_index')
-            return HttpResponse("خطای پرداخت!")
+            return redirect('shop:shop_index')
+
+
+
 
 
 def payment_success(request):
@@ -423,9 +413,16 @@ def payment_success(request):
 
 def checkout(request):
     cart = Cart(request)
-    cart_products = cart.get_prods
-    quantities = cart.get_quants
+    cart_products = cart.get_prods()
+    quantities = cart.get_quants()
     totals = cart.cart_total()
+
+    codes_map = {}
+    for product in cart_products:
+        if cart.get_codes(product.id):
+            codes_map[product.id] = ProductCode.objects.get(pk=int(cart.get_codes(product.id)[0]))
+        else:
+            codes_map[product.id] = "ندارد"
 
     if request.user.is_authenticated:
         shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
@@ -433,6 +430,7 @@ def checkout(request):
         return render(request, 'payment/checkout.html', {'cart_products': cart_products,
                                                          'quantities': quantities,
                                                          'totals': totals,
+                                                         'codes_map': codes_map,
                                                          'shipping_form': shipping_form})
     else:
         shipping_form = ShippingForm(request.POST or None)

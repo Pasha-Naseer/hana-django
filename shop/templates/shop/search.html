@@ -1,6 +1,5 @@
-
 {% extends 'shop/base.html '%}
-
+{% load humanize %}
 {% block content %}
 
 <section id="billboard" class="py-5" style="background:#fff;">
@@ -41,69 +40,67 @@
 
     <!-- Search Results -->
     {% if searched %}
-    <div class="row">
-      <div class="swiper main-swiper py-4" data-aos="fade-up" data-aos-delay="400">
-        <div class="swiper-wrapper d-flex border-animation-left">
+<div class="container py-4 mt-5" data-aos="fade-up" data-aos-delay="400">
+  <div class="row justify-content-center g-4">
+    {% for product in searched %}
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="collection-card p-3 text-center">
+          <!-- Product Image -->
+       <div class="collection-image mb-3"
+     style="position: relative; width: 100%; aspect-ratio: 6 / 5;
+            overflow: hidden; border-radius: 12px; background-color: #fdf9f3;
+            display: flex; align-items: center; justify-content: center; padding: 8px;">
+  <a href="{% url 'shop:products_detail' product.collection.id product.id %}">
+    <img src="{{ product.image.url }}" alt="{{ product.name }}"
+         class="rounded"
+         style="width: 100%; height: 100%; object-fit: contain; object-position: center;
+                background-color: #fff; transition: transform 0.4s ease-in-out;">
+  </a>
+</div>
 
-          {% for product in searched %}
-          <div class="swiper-slide">
-            <div class="banner-item image-zoom-effect p-3"
-                 style="background:#fff; border-radius:16px; border:1px solid #eee; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
 
-              <!-- Product Image -->
-              <div class="image-holder mb-3">
-                <a href="{% url 'shop:products_detail' product.collection.id product.id %}">
-                  <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded"
-                       >
-                </a>
-              </div>
+          <!-- Product Content -->
+          <div class="collection-content">
+            <h5 class="element-title text-uppercase mb-2">
+              <a href="{% url 'shop:products_detail' product.collection.id product.id %}"
+                 style="color:#6B3E26; font-size:1rem; font-weight:bold; text-decoration:none;">
+                {{ product.name }}
+              </a>
+            </h5>
 
-              <!-- Product Content -->
-              <div class="banner-content">
-                <h5 class="element-title text-uppercase mb-2">
-                  <a href="{% url 'shop:products_detail' product.collection.id product.id %}"
-                     style="color:#870000; font-weight:bold; text-decoration:none;">
-                    {{ product.name }}
-                  </a>
-                </h5>
-
-                {% if product.description %}
-                <p style="color:#555; font-size:0.9rem;">{{ product.description }}</p>
-                {% endif %}
-
-                {% if product.is_available %}
-                <span class="badge" style="background:#870000; color:white; border-radius:8px; padding:5px 12px;">
-                  موجود
-                </span>
-                {% else %}
-                <span class="badge" style="background:#999; color:white; border-radius:8px; padding:5px 12px;">
-                  ناموجود
-                </span>
-                {% endif %}
-              </div>
-            </div>
           </div>
-          {% endfor %}
-
+          <!-- Price & Discount -->
+{% if product.has_discount %}
+  <!-- Original Price with Red Cross -->
+  <h5 class="mt-3" style="color:#999; font-size:1rem; text-decoration: line-through; text-decoration-color:red;">
+    قیمت: {{ product.price|intcomma }}T
+  </h5>
+  <!-- Discount Info -->
+  <h5 style="color:#870000; font-size:1rem;">{{ product.price_with_discount|intcomma }}T</h5>
+{% else %}
+  <!-- Normal Price (no discount) -->
+  <h5 class="mt-3" style="color:#870000; font-size:1rem;">
+    {{ product.price|intcomma }}T
+  </h5>
+  <h6 style="color:#999; font-size:0.9rem;">تخفیف ندارد</h6>
+{% endif %}
+          <!-- Availability Badge -->
+          {% if product.quantity %}
+            <span class="badge" style="background:#B8860B; color:white; border-radius:10px; padding:6px 12px;">
+              موجود
+            </span>
+          {% else %}
+            <span class="badge" style="background:#999; color:white; border-radius:10px; padding:6px 12px;">
+              ناموجود
+            </span>
+          {% endif %}
         </div>
-        <div class="swiper-pagination"></div>
       </div>
-
-      <!-- Navigation Arrows -->
-      <div class="icon-arrow icon-arrow-left">
-        <svg width="50" height="50" viewBox="0 0 24 24" fill="#870000">
-          <use xlink:href="#arrow-left"></use>
-        </svg>
-      </div>
-      <div class="icon-arrow icon-arrow-right">
-        <svg width="50" height="50" viewBox="0 0 24 24" fill="#870000">
-          <use xlink:href="#arrow-right"></use>
-        </svg>
-      </div>
-    </div>
-    {% endif %}
-
+    {% endfor %}
   </div>
+</div>
+  </div>
+  {% endif %}
 </section>
 
 

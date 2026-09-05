@@ -1,7 +1,7 @@
 import random
 
 from django.shortcuts import render, redirect
-from .models import Collection, Product, Profile, Blog
+from .models import Collection, Product, Profile, Blog, Comment
 from django.utils import timezone
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -18,7 +18,7 @@ import json
 
 # is
 from django.views import View
-from .forms import UserRegistrationForm, VerifyCodeForm, UserChangeForm, UserChangeFormUser
+from .forms import UserRegistrationForm, VerifyCodeForm, UserChangeForm, UserChangeFormUser, CommentForm
 from utils import send_otp_code
 from .models import OtpCode, User
 from datetime import datetime, date, time, timedelta
@@ -58,20 +58,24 @@ def shop_index(request):
     famous_product_list = Product.objects.filter(Q(name__icontains='Simple') | Q(name__icontains='Nivea') |
                                                  Q(name__icontains='Loreal') | Q(name__icontains='Euphoria'))[:4]
     blog_list = Blog.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:3]
+    comments = Comment.objects.order_by('-date_submitted').filter(confirmed=True)[:20]
     context = {"latest_collection_list": latest_collection_list,
                'famous_product_list': famous_product_list,
-               'blog_list': blog_list}
-
+               'blog_list': blog_list,
+               'comments': comments,
+               }
     if request.method == 'POST':
         searched = request.POST['searched']
         searched = Product.objects.filter(Q(name__icontains=searched) | Q(description__icontains=searched) | Q(collection__name__icontains=searched) | Q(collection__description__icontains=searched))
         if not searched:
+
             messages.success(request, "کالایی با مشخصات مذکور موجود نیست!")
             return render(request, "shop/shop_index.html", context)
         else:
             context = {"latest_collection_list": latest_collection_list,
                        'famous_product_list': famous_product_list,
                        'blog_list': blog_list,
+                       'comments': comments,
                        'searched': searched,
                        }
             return render(request, 'shop/shop_index.html', context)
@@ -88,7 +92,7 @@ def products_index(request, collection_id):
 
 
 def products_detail(request, collection_id, product_id):
-    product = Product.objects.get(pk=product_id)
+    product = Product.objects.get(pk=product_id, collection=collection_id)
     context = {"product": product}
     return render(request, "shop/products_detail.html", context)
 
@@ -278,3 +282,24 @@ def search(request):
             return render(request, 'shop/search.html', {'searched': searched})
     else:
         return render(request, 'shop/search.html', {})
+
+
+class CommentView(View):
+    form_class = CommentForm
+
+    def get(self, request):
+        form = self.form_class
+        return render(request, 'shop/comment.html', {"form": form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            if request.user.is_authenticated:
+                comment = Comment(user=request.user, text=form.cleaned_data['text'])
+                comment.save()
+                messages.success(request, "کامنت شما با موفقیت ثبت شد")
+                return redirect('shop:shop_index')
+            else:
+                messages.error(request, 'برای ثبت کامنت باید وارد حساب شوید')
+                return redirect("shop:login")
+

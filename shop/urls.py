@@ -21,4 +21,5 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path("blog/", views.blog, name='blog'),
     path('blog/<str:blog_id>/', views.blog_detail, name='blog_detail'),
+    path('comment/', views.CommentView.as_view(), name='comment')
 ]

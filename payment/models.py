@@ -3,7 +3,7 @@ from django.db import models
 # from django.contrib.auth.models import User
 # is
 from shop.models import User
-from shop.models import Product
+from shop.models import Product, ProductCode
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 import datetime
@@ -49,7 +49,7 @@ class Order(models.Model):
     date_shipped = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return f"Order {str(self.id)}"
+        return f"{self.full_name} - {self.date_ordered.date()} - {self.date_ordered.hour} ساعت"
 
 
 @receiver(pre_save, sender=Order)
@@ -70,6 +70,7 @@ class OrderItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.PositiveBigIntegerField(default=1)
     price = models.DecimalField(default=0, decimal_places=0, max_digits=10)
+    product_code = models.ForeignKey(ProductCode, on_delete=models.PROTECT, null=True, blank=True)
 
     def __str__(self):
         return f"Order Item - {str(self.id)}"

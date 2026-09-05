@@ -23,6 +23,7 @@
       <div class="col-md-8 text-center" data-aos="fade-up" data-aos-delay="200">
 
         <!-- Availability -->
+         <!--
         {% if product.is_available %}
         <span class="badge" style="background:#870000; color:white; border-radius:6px; padding:4px 8px; font-size:0.8rem;">
           موجود
@@ -32,10 +33,10 @@
           ناموجود
         </span>
         {% endif %}
-
+      -->
         <!-- Description -->
         {% if product.description %}
-        <p class="mt-2" style="color:#444; font-size:0.85rem; line-height:1.5;">
+        <p class="mt-2" style="color:#444; font-size:0.85rem; line-height:1.5; white-space: pre-wrap; word-wrap: break-word;text-align: right;">
           {{ product.description }}
         </p>
         {% endif %}
@@ -56,7 +57,19 @@
   <h6 style="color:#999; font-size:0.9rem;">تخفیف ندارد</h6>
 {% endif %}
 
-
+    {% if product.has_code %}
+  <div class="row justify-content-center align-items-center mt-3">
+    <div class="col-md-2"><h6 style="color:#444; font-size:0.9rem;">کد محصول</h6></div>
+    <div class="col-md-4">
+      <select class="form-select text-center" id="code-cart" style="border-radius:6px; font-size:0.85rem; padding:4px;">
+        {% for code in product.codes.all %}
+          <option value="{{ code.id }}"> {{ code.code }} </option>
+        {{code.code}}
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+{% endif %}
         <!-- Quantity Selector -->
         <div class="row justify-content-center align-items-center mt-3">
           <div class="col-md-2"><h6 style="color:#444; font-size:0.9rem;">تعداد</h6></div>
@@ -70,7 +83,12 @@
             </select>
           </div>
         </div>
-
+        {% if product.quantity %}
+        <br/>
+          <span class="badge" style="background:#008000; color:white; border-radius:6px; padding:4px 8px; font-size:0.8rem;">
+          موجود
+        </span>
+        <br/>
         <!-- Add to Cart Button -->
         <button type="button" value="{{ product.id }}" class="btn mt-3" id="add-cart"
                 style="background:#870000; color:white; border-radius:6px; padding:6px 14px; font-size:0.9rem;">
@@ -79,12 +97,17 @@
         <br/>
         <a href="{% url 'cart:cart_summary' %}" class="btn mt-3" style="background:#870000; color:white; border-radius:6px; padding:6px 14px; font-size:0.9rem;">سبد خرید</a>
       </div>
+      {% else %}
+      <br/>
+        <span class="badge" style="background:#999; color:white; border-radius:6px; padding:4px 8px; font-size:0.8rem;">
+          ناموجود
+        </span>
+
+      {% endif %}
      {% if product.help_images %}
 <div class="container text-center my-4">
-
   <!-- Image row -->
   <div class="d-flex justify-content-center gap-3 flex-wrap">
-
     {% if product.image_1 %}
     <div class="image-holder" style="width: 150px; cursor: pointer;">
       <img src="{{ product.image_1.url }}" alt="{{ product.name }}" class="img-fluid rounded shadow-sm border"
@@ -131,8 +154,17 @@
 
 
         </div>
-    </div>
 
+    </div>
+<div class="row justify-content-center">
+      <div class="col-md-8 text-center" data-aos="fade-up" data-aos-delay="200">
+               {% if product.description_long %}
+        <p class="mt-2" style="color:#444; font-size:0.85rem; line-height:1.5; white-space: pre-wrap; word-wrap: break-word;text-align: right;">
+          {{ product.description_long }}
+        </p>
+        {% endif %}
+      </div>
+</div>
 </section>
 
 
@@ -146,6 +178,7 @@ $(document).on('click', '#add-cart', function(e){
         data: {
             product_id: $('#add-cart').val(),
             product_qty: $('#qty-cart option:selected').text(),
+            product_code_id: $('#code-cart').val(),
             csrfmiddlewaretoken: '{{ csrf_token }}',
             action: 'post'
         },
