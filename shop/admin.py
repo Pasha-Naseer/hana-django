@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Collection, Product, Customer, Order, Profile, Blog, ProductCode, Comment
+from .models import Collection, Product, Customer, Order, Profile, Blog, ProductCode, Comment, Festival
 # Used2B
 # from django.contrib.auth.models import User
 # is
@@ -10,6 +10,7 @@ from django.contrib.auth.models import Group
 
 admin.site.register(ProductCode)
 admin.site.register(Comment)
+admin.site.register(Festival)
 
 
 class ProductInline(admin.TabularInline):

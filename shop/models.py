@@ -111,8 +111,8 @@ class Customer(models.Model):
 
 
 class Collection(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.TextField(null=True, blank=True)
+    name = models.CharField(max_length=200, unique=True)
+    description = models.CharField(max_length=20, null=True, blank=True)
     is_available = models.BooleanField(default=False)
     image = models.ImageField(blank=True, default="fallback.png")
     pub_date = models.DateTimeField("creation date")
@@ -154,6 +154,10 @@ class ProductCode(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.code}"
+
+
+class Festival(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
 
 
 class Order(models.Model):
