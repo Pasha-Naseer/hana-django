@@ -127,7 +127,7 @@ class Product(models.Model):
     description = models.TextField(max_length=2000, null=True, blank=True)
     description_long = models.TextField(max_length=5000, null=True, blank=True)
     quantity = models.IntegerField(null=True, default=0)
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     price = models.DecimalField(default=0, decimal_places=0, max_digits=10)
     is_available = models.BooleanField(default=True)
     image = models.ImageField(blank=True, default="fallback.png")
