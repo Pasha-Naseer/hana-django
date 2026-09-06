@@ -2,427 +2,665 @@
 {% load static %}
 {% block content %}
 
+<style>
+  .homepage {
+    --hana-burgundy: #6d1128;
+    --hana-burgundy-deep: #4a0b1c;
+    --hana-rose: #b3364f;
+    --hana-gold: #c9a15a;
+    --hana-gold-soft: #e9d8b6;
+    --hana-cream: #faf6f0;
+    --hana-ink: #2b2320;
+    --hana-muted: #8a7d74;
+    --hana-line: #ece3d8;
+    --hana-radius-lg: 22px;
+    --hana-radius-md: 14px;
+    --hana-shadow-sm: 0 4px 16px rgba(74, 11, 28, 0.06);
+    --hana-shadow-md: 0 10px 30px rgba(74, 11, 28, 0.10);
+    --hana-shadow-lg: 0 18px 45px rgba(74, 11, 28, 0.16);
+    background: var(--hana-cream);
+    color: var(--hana-ink);
+    font-family: 'VAZIRmatn', sans-serif;
+  }
+
+  .homepage * { box-sizing: border-box; }
+
+  .homepage a { transition: all .25s ease; }
+
+  /* ---------- Section rhythm ---------- */
+  .homepage .hana-section {
+    padding: 72px 0;
+  }
+  .homepage .hana-section + .hana-section { padding-top: 0; }
+
+  /* ---------- Eyebrow + title ---------- */
+  .homepage .hana-eyebrow {
+    display: inline-block;
+    font-size: .8rem;
+    letter-spacing: 3px;
+    color: var(--hana-gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  .homepage .hana-heading {
+    font-weight: 800;
+    color: var(--hana-burgundy);
+    position: relative;
+    display: inline-block;
+    margin-bottom: 14px;
+  }
+  .homepage .hana-heading::after {
+    content: "";
+    display: block;
+    width: 56px;
+    height: 3px;
+    background: var(--hana-gold);
+    border-radius: 3px;
+    margin: 14px auto 0;
+  }
+  .homepage .hana-subtext {
+    color: var(--hana-muted);
+    font-size: .98rem;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .homepage .hana-header-block { text-align: center; margin-bottom: 46px; }
+
+  /* ---------- Buttons ---------- */
+  .homepage .hana-btn {
+    display: inline-block;
+    padding: 13px 34px;
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .homepage .hana-btn-primary {
+    background: var(--hana-burgundy);
+    color: #fff;
+    box-shadow: var(--hana-shadow-sm);
+  }
+  .homepage .hana-btn-primary:hover {
+    background: var(--hana-burgundy-deep);
+    box-shadow: var(--hana-shadow-md);
+    transform: translateY(-2px);
+    color: #fff;
+  }
+  .homepage .hana-btn-ghost {
+    background: #fff;
+    color: var(--hana-burgundy);
+    border-color: var(--hana-line);
+  }
+  .homepage .hana-btn-ghost:hover {
+    border-color: var(--hana-gold);
+    color: var(--hana-burgundy-deep);
+    transform: translateY(-2px);
+  }
+  .homepage .hana-btn-light {
+    background: rgba(255,255,255,.14);
+    color: #fff;
+    border-color: rgba(255,255,255,.35);
+  }
+  .homepage .hana-btn-light:hover {
+    background: #fff;
+    color: var(--hana-burgundy);
+  }
+
+  /* ---------- Billboard ---------- */
+  .homepage #billboard { background: var(--hana-cream) !important; padding: 64px 0 20px; }
+  .homepage .hana-logo-wrap img {
+    border-radius: 24px;
+    box-shadow: var(--hana-shadow-md);
+    border: 4px solid #fff;
+  }
+
+  /* ---------- Collection cards (categories) ---------- */
+  .homepage .collection-card {
+    background: #fff;
+    border-radius: var(--hana-radius-md);
+    border: 1px solid var(--hana-line);
+    box-shadow: var(--hana-shadow-sm);
+    transition: transform .3s ease, box-shadow .3s ease;
+    height: 100%;
+  }
+  .homepage .collection-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--hana-shadow-md);
+    border-color: var(--hana-gold-soft);
+  }
+  .homepage .collection-image img {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    width: 100%;
+  }
+  .homepage .collection-content h5 a {
+    color: var(--hana-burgundy) !important;
+  }
+  .homepage .collection-content p {
+    color: var(--hana-muted) !important;
+    min-height: 20px;
+  }
+  .homepage .hana-badge {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 5px 14px;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .3px;
+  }
+  .homepage .hana-badge-in { background: var(--hana-gold-soft); color: #6b4e1c; }
+  .homepage .hana-badge-out { background: #ece7e2; color: #8a7d74; }
+
+  /* ---------- Search card ---------- */
+  .homepage .hana-search-card {
+    border: 1px solid var(--hana-line);
+    border-radius: var(--hana-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--hana-shadow-sm);
+  }
+  .homepage .hana-search-card .card-header {
+    background: var(--hana-burgundy) !important;
+    color: #fff !important;
+    font-weight: 700;
+    border: none;
+    padding: 16px 20px;
+    letter-spacing: .5px;
+  }
+  .homepage .hana-search-card .card-body { padding: 24px; background: #fff; }
+  .homepage .hana-search-card input {
+    border-radius: 10px !important;
+    border: 1px solid var(--hana-line);
+    padding: 12px 14px;
+  }
+  .homepage .hana-search-card input:focus {
+    border-color: var(--hana-gold);
+    box-shadow: 0 0 0 3px rgba(201,161,90,.2);
+  }
+  .homepage .hana-search-card button {
+    border-radius: 10px !important;
+    background: var(--hana-burgundy) !important;
+    border: none;
+    font-weight: 700;
+    padding: 10px 26px !important;
+  }
+  .homepage .hana-search-card button:hover { background: var(--hana-burgundy-deep) !important; }
+
+  /* Search results */
+  .homepage .banner-item {
+    background: #fff;
+    border-radius: var(--hana-radius-md);
+    border: 1px solid var(--hana-line);
+    box-shadow: var(--hana-shadow-sm);
+  }
+  .homepage .banner-content h5 a { color: var(--hana-burgundy) !important; }
+
+  /* ---------- New arrival / sale section ---------- */
+  .homepage #new-arrival { background: #fff; }
+  .homepage #new-arrival h4 { color: var(--hana-burgundy) !important; }
+  .homepage #new-arrival p { color: var(--hana-muted) !important; }
+  .homepage .product-item {
+    background: #fff;
+    border-radius: var(--hana-radius-md);
+    border: 1px solid var(--hana-line);
+    box-shadow: var(--hana-shadow-sm);
+    overflow: hidden;
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .homepage .product-item:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--hana-shadow-md);
+  }
+  .homepage .product-item .image-holder img {
+    border-bottom: none !important;
+    max-height: 260px;
+    object-fit: cover;
+  }
+  .homepage .product-item .product-content h5 a {
+    color: var(--hana-ink) !important;
+    font-size: 1rem;
+  }
+
+  /* ---------- Collection / brand story ---------- */
+  .homepage section.collection {
+    background: linear-gradient(160deg, var(--hana-burgundy) 0%, var(--hana-burgundy-deep) 100%) !important;
+    border-radius: var(--hana-radius-lg);
+    margin: 0 auto;
+  }
+  .homepage section.collection .title-xlarge {
+    font-size: 2.4rem !important;
+    letter-spacing: 1px !important;
+  }
+  .homepage section.collection .title-xlarge::after {
+    content: "";
+    display: block;
+    width: 64px;
+    height: 3px;
+    background: var(--hana-gold);
+    margin: 18px auto 0;
+    border-radius: 3px;
+  }
+  .homepage section.collection .image-holder {
+    box-shadow: var(--hana-shadow-lg) !important;
+  }
+  .homepage section.collection .column-container.bg-white {
+    background: rgba(255,255,255,.06) !important;
+    border: 1px solid rgba(255,255,255,.14) !important;
+  }
+  .homepage section.collection h3 { color: var(--hana-gold-soft) !important; }
+  .homepage section.collection p { color: rgba(255,255,255,.85) !important; }
+
+  /* ---------- Video ---------- */
+  .homepage .video { background: var(--hana-cream); }
+  .homepage .video-content { border-radius: var(--hana-radius-lg); overflow: hidden; box-shadow: var(--hana-shadow-md); }
+
+  /* ---------- Testimonials ---------- */
+  .homepage .testimonials {
+    background: linear-gradient(160deg, var(--hana-burgundy) 0%, var(--hana-burgundy-deep) 100%) !important;
+
+    box-shadow: var(--hana-shadow-md);
+  }
+  .homepage .testimonials .section-title { color: #fff !important; text-shadow: none !important; font-weight: 800; }
+  .homepage .testimonial-item {
+    background: #fff !important;
+    color: var(--hana-ink) !important;
+    border-radius: var(--hana-radius-md) !important;
+    box-shadow: var(--hana-shadow-sm) !important;
+    position: relative;
+  }
+  .homepage .testimonial-item::before {
+    content: "\201C";
+    font-size: 3rem;
+    color: var(--hana-gold-soft);
+    position: absolute;
+    top: 4px;
+    right: 18px;
+    line-height: 1;
+    font-family: Georgia, serif;
+  }
+  .homepage .testimonial-item p { color: var(--hana-ink) !important; font-style: normal !important; }
+  .homepage .testimonial-item .review-title { color: var(--hana-burgundy) !important; }
+
+  /* ---------- Blog ---------- */
+  .homepage .blog {
+    background: var(--hana-cream) !important;
+    box-shadow: none !important;
+  }
+  .homepage .blog h4.text-uppercase { color: var(--hana-burgundy) !important; text-shadow: none !important; }
+  .homepage .blog .btn-link {
+    background: #fff !important;
+    border: 1px solid var(--hana-line);
+    box-shadow: none !important;
+  }
+  .homepage .post-item {
+    background: #fff !important;
+    border-radius: var(--hana-radius-md) !important;
+    box-shadow: var(--hana-shadow-sm) !important;
+    border: 1px solid var(--hana-line);
+  }
+  .homepage .post-item:hover { transform: translateY(-6px); box-shadow: var(--hana-shadow-md) !important; }
+  .homepage .post-image img { border-bottom: none !important; }
+  .homepage .post-title a { color: var(--hana-burgundy) !important; }
+  .homepage .post-meta { color: var(--hana-muted) !important; }
+
+  /* ---------- Logo bar ---------- */
+  .homepage .logo-bar { background: #fff; border-top: 1px solid var(--hana-line); border-bottom: 1px solid var(--hana-line); }
+  .homepage .logo-image { opacity: .55; filter: grayscale(100%); transition: opacity .25s ease, filter .25s ease; max-height: 46px; width: auto; }
+  .homepage .logo-image:hover { opacity: 1; filter: grayscale(0%); }
+
+  /* ---------- Features ---------- */
+  .homepage .features {
+    background: linear-gradient(160deg, var(--hana-burgundy) 0%, var(--hana-burgundy-deep) 100%) !important;
+
+  }
+  .homepage .features .feature-box {
+    padding: 34px 24px !important;
+    border-radius: 18px !important;
+    background: rgba(255,255,255,.05) !important;
+    border: 1px solid rgba(255,255,255,.16) !important;
+    height: 100%;
+  }
+  .homepage .features .feature-box:hover {
+    background: rgba(255,255,255,.09) !important;
+    border-color: var(--hana-gold) !important;
+    transform: translateY(-4px);
+  }
+  .homepage .features .feature-icon {
+    width: 60px; height: 60px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: rgba(201,161,90,.15);
+    border: 1px solid rgba(201,161,90,.4);
+  }
+  .homepage .features h4 { font-weight: 700 !important; font-size: 1.05rem !important; color:#ffffff !important;}
+  .homepage .features p { color: rgba(255,255,255,.78) !important; font-size: .92rem !important; }
+
+  /* ---------- Instagram ---------- */
+  .homepage .instagram { background: var(--hana-cream); padding-bottom: 90px; }
+  .homepage .insta-item { overflow: hidden; position: relative; }
+  .homepage .insta-image { transition: transform .4s ease; }
+  .homepage .insta-item:hover .insta-image { transform: scale(1.08); }
+  .homepage .instagram .hana-btn-primary { position: relative; z-index: 2; }
+
+  /* ---------- Trust seal ---------- */
+  .homepage .hana-trust { text-align: center; padding: 30px 0 10px; }
+
+  @media (max-width: 767px) {
+    .homepage .hana-section { padding: 48px 0; }
+    .homepage section.collection .title-xlarge { font-size: 1.8rem !important; }
+  }
+</style>
+
 <body class="homepage">
 
-  <section id="billboard" class="py-5" style="background:#fff;">
-  <div class="container text-center">
+  <section id="billboard" class="hana-section">
+    <div class="container text-center">
 
-    <!-- Logo -->
-    <div class="mb-4" data-aos="zoom-in">
-      <img src="{% static 'images/HANA.PNG' %}" width="200" height="200" alt="HANA Logo"
-           style="border-radius: 20px; box-shadow: 0 6px 16px rgba(0,0,0,0.1);">
-    </div>
-
-    <!-- Title -->
-    <h1 class="section-title mb-5" data-aos="fade-up"
-        style="color:#870000; font-family:'VAZIRmatn' !important; font-size: 2.2rem; font-weight:bold;">
-      محصولات هانا
-    </h1>
-
-    <!-- Swiper -->
-<div class="container py-4" data-aos="fade-up" data-aos-delay="300">
-  <div class="row justify-content-center g-4">
-    {% for collection in latest_collection_list %}
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-        <div class="collection-card p-3 text-center">
-          <!-- Image -->
-          <div class="collection-image mb-3">
-            <a href="{% url 'shop:products_index' collection.id %}">
-              <img src="{{ collection.image.url }}" alt="{{collection.name}}" class="img-fluid rounded">
-            </a>
-          </div>
-
-          <!-- Content -->
-          <div class="collection-content">
-            <h5 class="element-title text-uppercase mb-2">
-              <a href="{% url 'shop:products_index' collection.id %}"
-                 style="color:#6B3E26; font-weight:bold; text-decoration:none;">
-                {{ collection.name }}
-              </a>
-            </h5>
-            <p style="color:#555; font-size: 0.9rem;">{{ collection.description }}</p>
-          </div>
-
-          <!-- Availability Badge -->
-          {% if collection.is_available %}
-            <span class="badge" style="background:#B8860B; color:white; border-radius:10px; padding:6px 12px;">
-              موجود
-            </span>
-          {% else %}
-            <span class="badge" style="background:#999; color:white; border-radius:10px; padding:6px 12px;">
-              ناموجود
-            </span>
-          {% endif %}
-        </div>
+      <!-- Logo -->
+      <div class="mb-4 hana-logo-wrap" data-aos="zoom-in">
+        <img src="{% static 'images/cosmetics-logo.png' %}" width="140" height="140" alt="HANA Logo">
       </div>
-    {% endfor %}
-  </div>
-</div>
 
-<br/>
-    <!-- Arrows
-    <div class="icon-arrow icon-arrow-left">
-      <img src="{% static 'images/red-arrow-left.png' %}" alt="Prev">
-    </div>
-    <div class="icon-arrow icon-arrow-right">
-      <img src="{% static 'images/red-arrow-right.png' %}" alt="Next">
-    </div>
-
-  </div>-->
-    <!-- Subtitle -->
-    <!--
-<div class="row mt-4">
-  <div class="col text-center" data-aos="fade-up" data-aos-delay="500">
-    <h4 style="
-        color:#870000;
-        font-family:'VAZIRmatn' !important;
-        font-weight:bold;
-        font-size:1.2rem;
-        display:inline-block;
-        padding:6px 18px;
-        border:2px solid #870000;
-        border-radius:30px;
-        background:#fff;
-        box-shadow:0 3px 10px rgba(0,0,0,0.1);
-      ">
-      ورق بزنید
-    </h4>
-  </div>
-</div>
-    -->
-        <!-- Search Card -->
-    <div class="col-md-6 mx-auto mb-5">
-      <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-header" style="background:#870000; color:white; font-weight:bold;">
-          جست و جو
-        </div>
-        <div class="card-body">
-          <form method="POST" action="{% url 'shop:search' %}">
-            {% csrf_token %}
-            <div class="mb-3">
-              <input type="text" class="form-control" id="exampleFormControlInput1"
-                     placeholder="کلمات مرتبط با کالا یا نام کالا" name="searched"
-                     style="border-radius:8px;">
-            </div>
-            <button type="submit" class="btn" style="background:#870000; color:white; border-radius:8px; padding:8px 20px;">
-              پیدا کن
-            </button>
-          </form>
-        </div>
+      <!-- Title -->
+      <div class="hana-header-block" data-aos="fade-up">
+        <span class="hana-eyebrow">BRAND NAME</span>
+        <h1 class="hana-heading" style="font-size: 2.1rem;">نام برند</h1>
       </div>
-    </div>
 
-    <!-- Search Results -->
-    {% if searched %}
-    <div class="row">
-      <div class="swiper main-swiper py-4" data-aos="fade-up" data-aos-delay="400">
-        <div class="swiper-wrapper d-flex border-animation-left">
-
-          {% for product in searched %}
-          <div class="swiper-slide">
-            <div class="banner-item image-zoom-effect p-3"
-                 style="background:#fff; border-radius:16px; border:1px solid #eee; box-shadow:0 4px 12px rgba(0,0,0,0.08);">
-
-              <!-- Product Image -->
-              <div class="image-holder mb-3">
-                <a href="{% url 'shop:products_detail' product.collection.id product.id %}">
-                  <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded"
-                       >
-                </a>
-              </div>
-
-              <!-- Product Content -->
-              <div class="banner-content">
-                <h5 class="element-title text-uppercase mb-2">
-                  <a href="{% url 'shop:products_detail' product.collection.id product.id %}"
-                     style="color:#870000; font-weight:bold; text-decoration:none;">
-                    {{ product.name }}
+      <!-- Categories -->
+      <div class="container py-2" data-aos="fade-up" data-aos-delay="200">
+        <div class="row justify-content-center g-4">
+          {% for collection in latest_collection_list %}
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+              <div class="collection-card p-3 text-center">
+                <!-- Image -->
+                <div class="collection-image mb-3" style="border-radius: 10px; overflow: hidden;">
+                  <a href="{% url 'shop:products_index' collection.id %}">
+                    <img src="{{ collection.image.url }}" alt="{{ collection.name }}" class="img-fluid">
                   </a>
-                </h5>
+                </div>
 
-                {% if product.description %}
-                <p style="color:#555; font-size:0.9rem;">{{ product.description }}</p>
-                {% endif %}
+                <!-- Content -->
+                <div class="collection-content mb-2">
+                  <h5 class="element-title text-uppercase mb-2" style="font-size: .95rem;">
+                    <a href="{% url 'shop:products_index' collection.id %}">
+                      {{ collection.name }}
+                    </a>
+                  </h5>
+                  <p class="mb-2">{{ collection.description }}</p>
+                </div>
 
-                {% if product.is_available %}
-                <span class="badge" style="background:#870000; color:white; border-radius:8px; padding:5px 12px;">
-                  موجود
-                </span>
+                <!-- Availability Badge -->
+                {% if collection.is_available %}
+                  <span class="hana-badge hana-badge-in">موجود</span>
                 {% else %}
-                <span class="badge" style="background:#999; color:white; border-radius:8px; padding:5px 12px;">
-                  ناموجود
-                </span>
+                  <span class="hana-badge hana-badge-out">ناموجود</span>
                 {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Search Card -->
+      <div class="col-md-6 mx-auto my-5">
+        <div class="hana-search-card">
+          <div class="card-header">جست و جو</div>
+          <div class="card-body">
+            <form method="POST" action="{% url 'shop:search' %}">
+              {% csrf_token %}
+              <div class="mb-3">
+                <input type="text" class="form-control" id="exampleFormControlInput1"
+                       placeholder="کلمات مرتبط با کالا یا نام کالا" name="searched">
+              </div>
+              <button type="submit" class="btn" style="color: #ffffff;"> پیدا کن</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Results -->
+      {% if searched %}
+      <div class="row">
+        <div class="swiper main-swiper py-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="swiper-wrapper d-flex">
+
+            {% for product in searched %}
+            <div class="swiper-slide">
+              <div class="banner-item image-zoom-effect p-3">
+
+                <!-- Product Image -->
+                <div class="image-holder mb-3" style="border-radius: 10px; overflow: hidden;">
+                  <a href="{% url 'shop:products_detail' product.collection.id product.id %}">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+                  </a>
+                </div>
+
+                <!-- Product Content -->
+                <div class="banner-content">
+                  <h5 class="element-title text-uppercase mb-2">
+                    <a href="{% url 'shop:products_detail' product.collection.id product.id %}">
+                      {{ product.name }}
+                    </a>
+                  </h5>
+
+                  {% if product.description %}
+                  <p style="color:var(--hana-muted); font-size:0.9rem;">{{ product.description }}</p>
+                  {% endif %}
+
+                  {% if product.is_available %}
+                  <span class="hana-badge hana-badge-in">موجود</span>
+                  {% else %}
+                  <span class="hana-badge hana-badge-out">ناموجود</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <div class="icon-arrow icon-arrow-left">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="#6d1128">
+            <use xlink:href="#arrow-left"></use>
+          </svg>
+        </div>
+        <div class="icon-arrow icon-arrow-right">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="#6d1128">
+            <use xlink:href="#arrow-right"></use>
+          </svg>
+        </div>
+      </div>
+      {% endif %}
+
+  </section>
+
+  <section id="new-arrival" class="hana-section product-carousel position-relative overflow-hidden">
+    <div class="container">
+
+      <div class="hana-header-block">
+        <span class="hana-eyebrow" style="padding-top:50px;">SPECIAL OFFERS</span>
+        <h4 class="hana-heading text-uppercase" style="font-size: 1.9rem;">جشنواره فروش</h4>
+        <p class="hana-subtext">تخفیف‌های ویژه</p>
+      </div>
+
+      <!-- Swiper Slider -->
+      <div class="swiper product-swiper open-up" data-aos="zoom-out">
+        <div class="swiper-wrapper d-flex">
+
+          {% for famous_product in famous_product_list %}
+          <div class="swiper-slide">
+            <div class="product-item image-zoom-effect link-effect">
+              <div class="image-holder position-relative" style="text-align: center;">
+
+                <a href="{% url 'shop:products_detail' famous_product.product.collection.id famous_product.product.id %}">
+                  <img src="{{famous_product.product.image.url}}" alt="categories" class="product-image img-fluid">
+                </a>
+
+                <!-- Product Content -->
+                <div class="product-content" style="padding: 15px;">
+                  <h5 class="element-title text-uppercase fs-5 mt-3">
+                    <a href="{% url 'shop:products_detail' famous_product.product.collection.id famous_product.product.id %}">
+                       {{ famous_product.product.name }}
+                    </a>
+                  </h5>
+                </div>
               </div>
             </div>
           </div>
           {% endfor %}
 
         </div>
-        <div class="swiper-pagination"></div>
-      </div>
 
-      <!-- Navigation Arrows -->
-      <div class="icon-arrow icon-arrow-left">
-        <svg width="50" height="50" viewBox="0 0 24 24" fill="#870000">
-          <use xlink:href="#arrow-left"></use>
-        </svg>
-      </div>
-      <div class="icon-arrow icon-arrow-right">
-        <svg width="50" height="50" viewBox="0 0 24 24" fill="#870000">
-          <use xlink:href="#arrow-right"></use>
-        </svg>
-      </div>
-    </div>
-    {% endif %}
-
-</section>
-
-
-
-<section id="new-arrival" class="new-arrival product-carousel py-5 position-relative overflow-hidden"
-  style="background: linear-gradient(135deg, #ff1a40 10%, #b30024 90%); padding: 60px 0; border-radius: 12px;">
-
-  <div class="container">
-
-    <!-- Centered Header -->
-    <div style="text-align: center; margin-bottom: 50px;">
-        <h4 class="text-uppercase"
-          style="font-size: 36px; font-weight: 900; color: #fff; margin: 0 auto 20px auto;
-                 letter-spacing: 3px; padding-bottom: 12px; display: inline-block; position: relative;">
-        پرفروش ها
-      </h4>
-      <p style="font-size: 16px; color: #ffe6eb; margin-top: 10px;">بهترین محصولات محبوب شما</p>
-    </div>
-
-    <!-- Swiper Slider -->
-    <div class="swiper product-swiper open-up" data-aos="zoom-out">
-      <div class="swiper-wrapper d-flex">
-
-        {% for famous_product in famous_product_list %}
-        <div class="swiper-slide">
-          <div class="product-item image-zoom-effect link-effect"
-               style="background: #fff; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); overflow: hidden; transition: transform 0.3s ease;">
-            <div class="image-holder position-relative" style="text-align: center;">
-
-              <a href="{% url 'shop:products_detail' famous_product.collection.id famous_product.id %}">
-                <img src="{{famous_product.image.url}}" alt="categories"
-                     class="product-image img-fluid"
-                     style="border-bottom: 3px solid #ff4d6d; max-height: 250px; object-fit: cover;">
-              </a>
-
-              <!-- Wishlist Button -->
-              <a href="{% url 'shop:products_detail' famous_product.collection.id famous_product.id %}" class="btn-icon btn-wishlist"
-                 style="position: absolute; top: 10px; right: 10px; background: #fff; border-radius: 50%;
-                        padding: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
-                <svg width="24" height="24" viewBox="0 0 24 24" style="fill: #ff1a40;">
-                  <use xlink:href="#heart"></use>
-                </svg>
-              </a>
-
-              <!-- Product Content -->
-              <div class="product-content" style="padding: 15px;">
-                <h5 class="element-title text-uppercase fs-5 mt-3"
-                    style="font-size: 18px; font-weight: bold; color: #b30024;">
-                  <a href="{% url 'shop:products_detail' famous_product.collection.id famous_product.id %}"
-                     style="text-decoration: none; color: inherit;">
-                     {{ famous_product.name }}
-                  </a>
-                </h5>
-              </div>
-            </div>
-          </div>
+        <!-- Pagination & Arrows -->
+        <div class="swiper-pagination" style="margin-top: 20px;"></div>
+        <div class="icon-arrow icon-arrow-left"
+             style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); cursor: pointer;">
+          <svg width="44" height="44" viewBox="0 0 24 24" style="fill: var(--hana-burgundy);">
+            <use xlink:href="#arrow-left"></use>
+          </svg>
         </div>
-        {% endfor %}
-
-      </div>
-
-      <!-- Pagination & Arrows -->
-      <div class="swiper-pagination" style="margin-top: 20px;"></div>
-      <div class="icon-arrow icon-arrow-left"
-           style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); cursor: pointer;">
-        <svg width="50" height="50" viewBox="0 0 24 24" style="fill: #fff;">
-          <use xlink:href="#arrow-left"></use>
-        </svg>
-      </div>
-      <div class="icon-arrow icon-arrow-right"
-           style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
-        <svg width="50" height="50" viewBox="0 0 24 24" style="fill: #fff;">
-          <use xlink:href="#arrow-right"></use>
-        </svg>
-      </div>
-    </div>
-  </div>
-</section>
-<br/><br/>
-
-
-
-  <br/><br/>
-
-<br/><br/>
-<section class="collection bg-light position-relative py-5"
-  style="background: linear-gradient(135deg, #8B0000, #B22222, #DC143C) !important; padding: 60px 0 !important; color: white !important; position: relative !important;">
-  <div class="container" style="max-width: 1140px !important; margin: auto !important;">
-    <div class="row" style="display: flex !important; flex-wrap: wrap !important; align-items: center !important; justify-content: center !important;">
-
-      <!-- Section Title -->
-      <div class="title-xlarge text-uppercase txt-fx domino"
-        style="font-size: 48px !important; font-weight: bold !important; text-transform: uppercase !important; text-align: center !important; width: 100% !important; margin-bottom: 30px !important; color: #fff !important; letter-spacing: 2px !important;">
-        Collection
-      </div>
-
-      <div class="collection-item d-flex flex-wrap my-5"
-        style="display: flex !important; flex-wrap: wrap !important; align-items: center !important; justify-content: center !important; gap: 20px !important; width: 100% !important;">
-
-        <!-- Image Column -->
-        <div class="col-md-6 column-container" style="flex: 1 1 45% !important; text-align: center !important;">
-          <div class="image-holder"
-            style="border-radius: 20px !important; overflow: hidden !important; box-shadow: 0 15px 35px rgba(0,0,0,0.4) !important;">
-            <img src="{% static 'images/hana_wallpaper.JPG' %}" alt="collection"
-              class="product-image img-fluid"
-              style="width: 100% !important; height: auto !important; display: block !important; border-radius: 20px !important; transition: transform 0.5s ease !important;"
-              onmouseover="this.style.transform='scale(1.05)'"
-              onmouseout="this.style.transform='scale(1)'">
-          </div>
-        </div>
-
-        <!-- Text Column -->
-        <div class="col-md-6 column-container bg-white"
-          style="flex: 1 1 45% !important; background: rgba(255,255,255,0.1) !important; border-radius: 20px !important; padding: 40px !important; margin: 20px 0 !important; box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important; color: #fff !important;">
-
-          <div class="collection-content p-5 m-0 m-md-5" style="padding: 20px !important; margin: 0 !important;">
-            <h3 class="element-title text-uppercase"
-              style="font-size: 28px !important; font-weight: bold !important; text-transform: uppercase !important; margin-bottom: 20px !important; color: #ffcccc !important;">
-              چرا از هانا خرید کنم؟
-            </h3>
-            <p style="line-height: 1.8 !important; font-size: 16px !important; margin-bottom: 20px !important; color: #fff !important;">
-              هانا از سال 1394 فعالیت خود را در زمینه لوازم آرایشی بهداشتی آغاز کرد، از همان ابتدا به دلیل عرضه محصولات اورجینال و کاربردی مورد توجه همشهریان عزیز قرار گرفت. هانا سالها بخاطر رفتار صادقانه و حرفه ای با مشتریانش توانسته است انتخاب اول آنها باقی بماند. شما هم با یکبار استفاده از محصولات ما به طور قطعی از مشتریان ارزشمند ما خواهید شد. اعتماد شما باعث سربلندی ماست.
-            </p>
-            <a href="#" class="btn btn-dark text-uppercase mt-3"
-              style="display: inline-block !important; padding: 12px 24px !important; background: white !important; color: red !important; font-weight: bold !important; text-decoration: none !important; border-radius: 30px !important; letter-spacing: 1px !important; transition: all 0.3s ease !important; text-transform: uppercase !important;"
-              onmouseover="this.style.background='#red'; this.style.transform='scale(1.1)';"
-              onmouseout="this.style.background='#000000'; this.style.transform='scale(1)';">
-              کالکشن محصولات
-            </a>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-  <section class="video py-5 overflow-hidden">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="video-content open-up" data-aos="zoom-out">
-          <div class="video-bg">
-            <img src="{% static 'images/video_wallpaper.jpg' %}" alt="video" class="video-image img-fluid">
-          </div>
-          <div class="video-player">
-            <a class="youtube" href="https://www.youtube.com/embed/pjtsGzQjFM4">
-              <svg width="24" height="24" viewBox="0 0 24 24">
-                <use xlink:href="#play"></use>
-              </svg>
-              <img src="{% static 'images/text-pattern.png' %}" alt="pattern" class="text-rotate">
-            </a>
-          </div>
+        <div class="icon-arrow icon-arrow-right"
+             style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+          <svg width="44" height="44" viewBox="0 0 24 24" style="fill: var(--hana-burgundy);">
+            <use xlink:href="#arrow-right"></use>
+          </svg>
         </div>
       </div>
     </div>
   </section>
 
-<section class="testimonials py-5" style="background: linear-gradient(135deg, #ff4d4d, #b30000); color: #fff; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
-  <div class="section-header text-center mt-5">
-    <h3 class="section-title" style="font-size: 2rem; font-weight: bold; color: #fff; text-shadow: 2px 2px 6px rgba(0,0,0,0.3);">
-      ما عاشق پیشنهاداتتون هستیم
-    </h3>
-  </div>
-  <div class="swiper testimonial-swiper overflow-hidden my-5">
-    <div class="swiper-wrapper d-flex">
+  <section class="collection hana-section position-relative" style="border-radius: 0px">
+    <div class="container" style="max-width: 1140px; padding: 60px 20px;">
+      <div class="row" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center;">
 
-      {% for comment in comments %}
-      <div class="swiper-slide">
-        <div class="testimonial-item text-center" style="background:#fff; color:#b30000; border-radius:15px; padding:25px; margin:10px; box-shadow:0 6px 15px rgba(0,0,0,0.2);">
-          <blockquote>
-            <p style="font-size:1.1rem; font-style:italic;">{{ comment.text }}</p>
-            <div class="review-title text-uppercase" style="margin-top:15px; font-weight:bold;">{{ comment.user.first_name }}</div>
-          </blockquote>
+        <div class="title-xlarge text-uppercase txt-fx domino" style="width:100%; text-align:center; color:#fff;">
+          نام برند
         </div>
-      </div>
-      {% endfor %}
 
-    </div>
-  </div>
+        <div class="collection-item d-flex flex-wrap my-5"
+             style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:20px; width:100%;">
 
-  <div class="testimonial-swiper-pagination d-flex justify-content-center mb-5"></div>
-  <div style="text-align: center; margin-top: 20px;">
-  <a href="{% url 'shop:comment' %}"
-     style="
-       display: inline-block;
-       padding: 10px 26px;
-       background-color: #ffffff;
-       color: #b00020;
-       text-decoration: none;
-       font-weight: 700;
-       border-radius: 30px;
-       border: 1px solid #e5e5e5;
-       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-       transition: all 0.25s ease;
-     "
-     onmouseover="this.style.backgroundColor='#b00020'; this.style.color='#fff'; this.style.boxShadow='0 6px 18px rgba(176,0,32,0.35)'"
-     onmouseout="this.style.backgroundColor='#fff'; this.style.color='#b00020'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'"
-  >
-    ثبت کامنت
-  </a>
-</div>
-
-</section>
-
-
-<section class="blog py-5" style="background: linear-gradient(135deg, #ff4d4d, #b30000); border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
-  <div class="container">
-    <div class="d-flex flex-wrap justify-content-between align-items-center mt-5 mb-4">
-      <h4 class="text-uppercase" style="font-size: 1.8rem; font-weight: bold; color: #fff; text-shadow: 1px 1px 5px rgba(0,0,0,0.4);">
-        وبلاگ های ما را بخوانید
-      </h4>
-      <h4 class="btn-link" style="font-family: 'VAZIRmatn' !important; font-size: 1rem; background: #fff; padding: 8px 18px; border-radius: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-        <a href="{% url 'shop:blog' %}" style="text-decoration: none; color: #b30000; font-weight: bold;">همه</a>
-      </h4>
-    </div>
-
-    <div class="row">
-      {% for blog in blog_list %}
-      <div class="col-md-4 mb-4">
-        <article class="post-item" style="background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 6px 15px rgba(0,0,0,0.15); transition: transform 0.3s;">
-          <div class="post-image" style="overflow:hidden;">
-            <a href="{% url 'shop:blog_detail' blog.id %}">
-              <img src="{{ blog.blog_image.url }}" alt="image" class="post-grid-image img-fluid" style="width:100%; height:auto; border-bottom: 3px solid #b30000; transition: transform 0.3s;">
-            </a>
-          </div>
-          <div class="post-content d-flex flex-column gap-2 p-3">
-            <h5 class="post-title text-uppercase" style="font-size: 1.2rem; font-weight: bold; color: #b30000;">
-              <a href="{% url 'shop:blog_detail' blog.id %}" style="text-decoration: none; color: inherit;">{{ blog.title }}</a>
-            </h5>
-            <p style="font-size: 0.95rem; color: #333;">{{ blog.body_summary }}...</p>
-            <div class="post-meta text-uppercase fs-6" style="font-size: 0.8rem; color: #777;">
-              <span class="meta-day">{{ blog.pub_date }}</span>
+          <!-- Image Column -->
+          <div class="col-md-6 column-container" style="flex: 1 1 45%; text-align:center;">
+            <div class="image-holder" style="border-radius: 20px; overflow: hidden;">
+              <img src="{% static 'images/hana_wallpaper.JPG' %}" alt="collection" class="product-image img-fluid"
+                   style="width:100%; height:auto; display:block; transition: transform .5s ease;"
+                   onmouseover="this.style.transform='scale(1.05)'"
+                   onmouseout="this.style.transform='scale(1)'">
             </div>
           </div>
-        </article>
+
+          <!-- Text Column -->
+          <div class="col-md-6 column-container bg-white" style="flex: 1 1 45%; border-radius: 20px; padding: 20px; margin: 20px 0;">
+            <div class="collection-content p-4 m-0">
+              <h3 class="element-title text-uppercase">لورم ایپسوم؟</h3>
+              <p style="font-size:18px">
+لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.
+              </p>
+              <a href="#" class="hana-btn hana-btn-light text-uppercase mt-3">کالکشن محصولات</a>
+            </div>
+          </div>
+        </div>
       </div>
-      {% endfor %}
     </div>
-  </div>
-</section>
+    <div class="section-header text-center">
+      <span class="hana-eyebrow" style="color: var(--hana-gold-soft);">FEEDBACK</span>
+      <h3 class="section-title">ما عاشق پیشنهاداتتون هستیم</h3>
+    </div>
+    <div class="swiper testimonial-swiper overflow-hidden my-5">
+      <div class="swiper-wrapper d-flex">
+
+        {% for comment in comments %}
+        <div class="swiper-slide">
+          <div class="testimonial-item text-center p-4 mx-2">
+            <blockquote class="mb-0">
+              <p style="color:#660033 !important; font-size:30px !important;">{{ comment.text }}</p>
+              <div class="review-title text-uppercase mt-3">{{ comment.user.first_name }}</div>
+            </blockquote>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+
+    <div class="testimonial-swiper-pagination d-flex justify-content-center mb-5"></div>
+    <div class="text-center">
+      <a href="{% url 'shop:comment' %}" class="hana-btn hana-btn-light">ثبت کامنت</a>
+    </div>
+
+  </section>
+
+<!--  <section class="video hana-section overflow-hidden">-->
+<!--    <div class="container-fluid">-->
+<!--      <div class="row">-->
+<!--        <div class="video-content open-up" data-aos="zoom-out">-->
+<!--          <div class="video-bg">-->
+<!--            <img src="{% static 'images/video_wallpaper.jpg' %}" alt="video" class="video-image img-fluid">-->
+<!--          </div>-->
+<!--          <div class="video-player">-->
+<!--            <a class="youtube" href="https://www.youtube.com/embed/pjtsGzQjFM4">-->
+<!--              <svg width="24" height="24" viewBox="0 0 24 24">-->
+<!--                <use xlink:href="#play"></use>-->
+<!--              </svg>-->
+<!--              <img src="{% static 'images/text-pattern.png' %}" alt="pattern" class="text-rotate">-->
+<!--            </a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </section>-->
 
 
-  <section class="logo-bar py-5 my-5">
+
+  <section class="blog hana-section" style="padding-top:20px;">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+        <div>
+          <span class="hana-eyebrow">HANA JOURNAL</span>
+          <h4 class="text-uppercase mb-0" style="font-size: 1.7rem;">وبلاگ های ما را بخوانید</h4>
+        </div>
+
+          <a href="{% url 'shop:blog' %}" style="color:#660033 !important; background-color:transparent !important; text-decoration:none !important; font-size:25px;">همه</a>
+
+      </div>
+
+      <div class="row">
+        {% for blog in blog_list %}
+        <div class="col-md-4 mb-4">
+          <article class="post-item h-100">
+            <div class="post-image" style="overflow:hidden;">
+              <a href="{% url 'shop:blog_detail' blog.id %}">
+                <img src="{{ blog.blog_image.url }}" alt="image" class="post-grid-image img-fluid" style="width:100%; height:auto;">
+              </a>
+            </div>
+            <div class="post-content d-flex flex-column gap-2 p-3">
+              <h5 class="post-title text-uppercase mb-1" style="font-size: 1.1rem;">
+                <a href="{% url 'shop:blog_detail' blog.id %}">{{ blog.title }}</a>
+              </h5>
+              <p style="font-size: 0.92rem; color:#5a5048;">{{ blog.body_summary }}...</p>
+              <div class="post-meta text-uppercase fs-6">
+                <span class="meta-day">{{ blog.pub_date }}</span>
+              </div>
+            </div>
+          </article>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="logo-bar py-5">
     <div class="container">
       <div class="row">
-        <div class="logo-content d-flex flex-wrap justify-content-between">
+        <div class="logo-content d-flex flex-wrap justify-content-between align-items-center">
           <img src="{% static 'images/logo1.png' %}" alt="logo" class="logo-image img-fluid">
           <img src="{% static 'images/logo2.png' %}" alt="logo" class="logo-image img-fluid">
           <img src="{% static 'images/logo3.png' %}" alt="logo" class="logo-image img-fluid">
@@ -432,120 +670,88 @@
       </div>
     </div>
   </section>
-<!-- Features Section -->
-<section class="features py-5"
-  style="background: linear-gradient(135deg, #8B0000, #B22222, #DC143C) !important; color: white !important; padding: 60px 0 !important;">
-  <div class="container" style="max-width: 1140px !important; margin: auto !important;">
-    <div class="row g-4" style="display: flex !important; flex-wrap: wrap !important; gap: 20px !important;">
 
-      <!-- Feature Box -->
-      <div class="col-md-3 text-center" data-aos="zoom-in" data-aos-delay="0"
-        style="flex: 1 1 22% !important; text-align: center !important;">
-        <div style="padding: 30px !important; border-radius: 20px !important; background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.2) !important; transition: all 0.4s ease !important; box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;">
-          <svg width="50" height="50" viewBox="0 0 24 24"
-            style="margin-bottom: 15px !important; fill: white !important; transition: transform 0.3s ease !important;">
-            <use xlink:href="#calendar"></use>
-          </svg>
-          <h4 style="margin: 15px 0 !important; font-weight: bold !important;">تضمین ارسال</h4>
-          <p style="margin: 0 !important;">بسته بندی خوشگل و امن که حتما خوشتون میاد!</p>
+  <!-- Features Section -->
+  <section class="features hana-section">
+    <div class="container" style="max-width: 1140px; padding: 60px 20px;">
+      <div class="row g-4" style="display:flex; flex-wrap:wrap; gap:20px;">
+
+        <div class="col-md-3 text-center" data-aos="zoom-in" data-aos-delay="0" style="flex: 1 1 22%;">
+          <div class="feature-box">
+            <div class="feature-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" style="fill: var(--hana-gold);">
+                <use xlink:href="#calendar"></use>
+              </svg>
+            </div>
+            <h4>تضمین ارسال</h4>
+            <p>بسته بندی خوشگل و امن که حتما خوشتون میاد!</p>
+          </div>
         </div>
-      </div>
 
-      <!-- Feature Box -->
-      <div class="col-md-3 text-center" data-aos="zoom-in" data-aos-delay="200"
-        style="flex: 1 1 22% !important; text-align: center !important;">
-        <div style="padding: 30px !important; border-radius: 20px !important; background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.2) !important; transition: all 0.4s ease !important; box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;">
-          <svg width="50" height="50" viewBox="0 0 24 24"
-            style="margin-bottom: 15px !important; fill: white !important; transition: transform 0.3s ease !important;">
-            <use xlink:href="#shopping-bag"></use>
-          </svg>
-          <h4 style="margin: 15px 0 !important; font-weight: bold !important;">ارسال سریع</h4>
-          <p style="margin: 0 !important;">سفارشو میدین و به زودی به دستتون میرسه!</p>
+        <div class="col-md-3 text-center" data-aos="zoom-in" data-aos-delay="200" style="flex: 1 1 22%;">
+          <div class="feature-box">
+            <div class="feature-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" style="fill: var(--hana-gold);">
+                <use xlink:href="#shopping-bag"></use>
+              </svg>
+            </div>
+            <h4>ارسال سریع</h4>
+            <p>سفارشو میدین و به زودی به دستتون میرسه!</p>
+          </div>
         </div>
-      </div>
 
-      <!-- Feature Box -->
-      <div class="col-md-3 text-center" data-aos="zoom-in" data-aos-delay="400"
-        style="flex: 1 1 22% !important; text-align: center !important;">
-        <div style="padding: 30px !important; border-radius: 20px !important; background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.2) !important; transition: all 0.4s ease !important; box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;">
-          <svg width="50" height="50" viewBox="0 0 24 24"
-            style="margin-bottom: 15px !important; fill: white !important; transition: transform 0.3s ease !important;">
-            <use xlink:href="#gift"></use>
-          </svg>
-          <h4 style="margin: 15px 0 !important; font-weight: bold !important;">خرید حضوری</h4>
-          <p style="margin: 0 !important;">به صورت حضوری هم  از صبح تا شب با شماییم!</p>
+        <div class="col-md-3 text-center" data-aos="zoom-in" data-aos-delay="400" style="flex: 1 1 22%;">
+          <div class="feature-box">
+            <div class="feature-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" style="fill: var(--hana-gold);">
+                <use xlink:href="#gift"></use>
+              </svg>
+            </div>
+            <h4>خرید حضوری</h4>
+            <p>به صورت حضوری هم از صبح تا شب با شماییم!</p>
+          </div>
         </div>
-      </div>
 
-      <!-- Feature Box -->
-      <div class="col-md-3 text-center" data-aos="zoom-in" data-aos-delay="600"
-        style="flex: 1 1 22% !important; text-align: center !important;">
-        <div style="padding: 30px !important; border-radius: 20px !important; background: rgba(255,255,255,0.05) !important; border: 1px solid rgba(255,255,255,0.2) !important; transition: all 0.4s ease !important; box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;">
-          <svg width="50" height="50" viewBox="0 0 24 24"
-            style="margin-bottom: 15px !important; fill: white !important; transition: transform 0.3s ease !important;">
-            <use xlink:href="#arrow-cycle"></use>
-          </svg>
-          <h4 style="margin: 15px 0 !important; font-weight: bold !important;">کیفیت بالا</h4>
-          <p style="margin: 0 !important;">
-همه محصولات ما اورجینال و اصلن!</p>
+        <div class="col-md-3 text-center" data-aos="zoom-in" data-aos-delay="600" style="flex: 1 1 22%;">
+          <div class="feature-box">
+            <div class="feature-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" style="fill: var(--hana-gold);">
+                <use xlink:href="#arrow-cycle"></use>
+              </svg>
+            </div>
+            <h4>کیفیت بالا</h4>
+            <p>همه محصولات ما اورجینال و اصلن!</p>
+          </div>
         </div>
-      </div>
 
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-  <section class="instagram position-relative">
-    <div class="d-flex justify-content-center w-100 position-absolute bottom-0 z-1">
-      <a href="https://www.instagram.com/galleryhana_shop?igsh=cDZpejIwbWY4dHZ4" class="btn btn-dark px-5">ما را در اینستاگرام دنبال کنید</a>
+  <section class="instagram hana-section position-relative">
+
+    <div class="d-flex justify-content-center w-100 position-absolute bottom-0 z-1" style="margin-bottom: 20px;">
+      <a href="#" class="hana-btn hana-btn-primary">ما را در اینستاگرام دنبال کنید</a>
     </div>
+
     <div class="row g-0">
+      {% for post in instagram_posts %}
       <div class="col-6 col-sm-4 col-md-2">
         <div class="insta-item">
-          <a href="https://www.instagram.com/reel/DLp8QOqiYWJ/?igsh=a3VvNGJ1ZDBscmNz" target="_blank">
-            <img src="{% static 'images/insta-cover3.jpg' %}" alt="instagram" class="insta-image img-fluid">
+          <a href="{{ post.post_link }}" target="_blank">
+            <img src="{{ post.img.url }}" alt="instagram" class="insta-image img-fluid">
           </a>
         </div>
       </div>
-      <div class="col-6 col-sm-4 col-md-2">
-        <div class="insta-item">
-          <a href="https://www.instagram.com/p/DL8BXMFAyYI/?img_index=4&igsh=MTQxNXZ5Zjh6OXl6cA==" target="_blank">
-            <img src="{% static 'images/insta-cover2.jpg' %}" alt="instagram" class="insta-image img-fluid">
-          </a>
-        </div>
-      </div>
-      <div class="col-6 col-sm-4 col-md-2">
-        <div class="insta-item">
-          <a href="https://www.instagram.com/reel/DLp8QOqiYWJ/?igsh=a3VvNGJ1ZDBscmNz" target="_blank">
-            <img src="{% static 'images/insta-cover3.jpg' %}" alt="instagram" class="insta-image img-fluid">
-          </a>
-        </div>
-      </div>
-      <div class="col-6 col-sm-4 col-md-2">
-        <div class="insta-item">
-          <a href="https://www.instagram.com/reel/DLiJWveCDK6/?igsh=OGhjeno3cWNndHU1" target="_blank">
-            <img src="{% static 'images/insta-cover4.jpg' %}" alt="instagram" class="insta-image img-fluid">
-          </a>
-        </div>
-      </div>
-      <div class="col-6 col-sm-4 col-md-2">
-        <div class="insta-item">
-          <a href="https://www.instagram.com/p/DKNI-sYiwJR/?igsh=ZWtxM2EwNTczMWJ0" target="_blank">
-            <img src="{% static 'images/insta-cover5.jpg' %}" alt="instagram" class="insta-image img-fluid">
-          </a>
-        </div>
-      </div>
-      <div class="col-6 col-sm-4 col-md-2">
-        <div class="insta-item">
-          <a href="https://www.instagram.com/reel/DLp8QOqiYWJ/?igsh=a3VvNGJ1ZDBscmNz" target="_blank">
-            <img src="{% static 'images/insta-cover2.jpg' %}" alt="instagram" class="insta-image img-fluid">
-          </a>
-        </div>
-      </div>
+      {% endfor %}
+
     </div>
 
   </section>
+
+  <div class="hana-trust">
     <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=639979&Code=E08CKVNQfvLgxCdq7tjGN2Z3aoFBfwbu'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=639979&Code=E08CKVNQfvLgxCdq7tjGN2Z3aoFBfwbu' alt='' style='cursor:pointer' code='E08CKVNQfvLgxCdq7tjGN2Z3aoFBfwbu'></a>
+  </div>
 </body>
 
 <script>

@@ -1,27 +1,180 @@
 {% load static %}
 
-<nav class="navbar navbar-expand-lg p-3 border-bottom align-items-center"
-  style="background: linear-gradient(90deg, #b30000, #ff4d4d); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+<style>
+  :root {
+    --hana-burgundy: #6d1128;
+    --hana-burgundy-deep: #4a0b1c;
+    --hana-rose: #b3364f;
+    --hana-gold: #c9a15a;
+    --hana-gold-soft: #e9d8b6;
+    --hana-cream: #faf6f0;
+    --hana-ink: #2b2320;
+    --hana-line: #ece3d8;
+  }
+
+  nav.navbar.hana-navbar {
+    background: linear-gradient(90deg, var(--hana-burgundy) 0%, var(--hana-burgundy-deep) 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 18px rgba(74, 11, 28, 0.18) !important;
+    border-bottom: none !important;
+    padding: 14px 0 !important;
+    transition: transform .35s ease, box-shadow .35s ease !important;
+    font-family: 'VAZIRmatn', sans-serif !important;
+  }
+  nav.navbar.hana-navbar.nav-hidden {
+    transform: translateY(-100%) !important;
+  }
+
+  /* ---------- Logo ---------- */
+  nav.navbar.hana-navbar .navbar-brand img {
+    border-radius: 50% !important;
+    border: 2px solid var(--hana-gold-soft) !important;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25) !important;
+    transition: transform .25s ease !important;
+  }
+  nav.navbar.hana-navbar .navbar-brand:hover img {
+    transform: scale(1.06) !important;
+  }
+
+  /* ---------- Toggler ---------- */
+  nav.navbar.hana-navbar .navbar-toggler {
+    border: 1px solid rgba(255,255,255,.4) !important;
+    background: rgba(255,255,255,.12) !important;
+    border-radius: 10px !important;
+    padding: 7px 11px !important;
+    box-shadow: none !important;
+  }
+  nav.navbar.hana-navbar .navbar-toggler:focus {
+    box-shadow: 0 0 0 3px rgba(201,161,90,.35) !important;
+  }
+  nav.navbar.hana-navbar .navbar-toggler-icon {
+    filter: invert(1) !important;
+  }
+
+  /* ---------- Offcanvas ---------- */
+  .hana-offcanvas {
+    background: var(--hana-cream) !important;
+    font-family: 'VAZIRmatn', sans-serif !important;
+  }
+  .hana-offcanvas .offcanvas-header {
+    background: var(--hana-burgundy) !important;
+    color: #fff !important;
+    padding: 18px 22px !important;
+  }
+  .hana-offcanvas .offcanvas-header .offcanvas-title {
+    font-weight: 800 !important;
+    letter-spacing: .5px !important;
+    color: #fff !important;
+  }
+  .hana-offcanvas .offcanvas-body {
+    padding: 22px !important;
+  }
+
+  /* ---------- Nav links (pill style) ---------- */
+  .hana-navbar .hana-nav-link,
+  .hana-offcanvas .hana-nav-link {
+    display: inline-block !important;
+    font-family: 'VAZIRmatn', sans-serif !important;
+    color: var(--hana-burgundy) !important;
+    background: #fff !important;
+    border: 1px solid var(--hana-line) !important;
+    padding: 8px 18px !important;
+    border-radius: 999px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    transition: all .25s ease !important;
+  }
+  .hana-navbar .hana-nav-link:hover,
+  .hana-offcanvas .hana-nav-link:hover {
+    background: var(--hana-burgundy) !important;
+    color: #fff !important;
+    border-color: var(--hana-burgundy) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba(74,11,28,.18) !important;
+  }
+
+  /* Dropdown toggle keeps pill look, arrow included */
+  .hana-offcanvas .dropdown-toggle::after {
+    vertical-align: middle !important;
+  }
+
+  /* Dropdown menu */
+  .hana-offcanvas .dropdown-menu {
+    background: #fff !important;
+    border: 1px solid var(--hana-line) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 10px 30px rgba(74,11,28,.14) !important;
+    padding: 10px !important;
+    margin-top: 8px !important;
+  }
+  .hana-offcanvas .dropdown-menu .dropdown-item.hana-nav-link {
+    width: 100% !important;
+    margin-bottom: 6px !important;
+    text-align: center !important;
+  }
+  .hana-offcanvas .dropdown-menu .dropdown-item.hana-nav-link:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* Close button */
+  .hana-offcanvas .btn-close {
+    opacity: .9 !important;
+  }
+
+  /* ---------- Cart button ---------- */
+  .hana-navbar .hana-cart-link {
+    font-family: 'VAZIRmatn', sans-serif !important;
+    color: #fff !important;
+    background: var(--hana-gold) !important;
+    padding: 9px 22px !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 14px rgba(0,0,0,.2) !important;
+    transition: all .25s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  .hana-navbar .hana-cart-link:hover {
+    background: #b78a3f !important;
+    transform: translateY(-2px) !important;
+    color: #fff !important;
+  }
+  .hana-navbar .wishlist-count {
+    background: var(--hana-burgundy-deep) !important;
+    color: #fff !important;
+    border-radius: 50% !important;
+    min-width: 22px !important;
+    height: 22px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: .78rem !important;
+    font-weight: 700 !important;
+    padding: 0 5px !important;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg hana-navbar align-items-center">
   <div class="container-fluid">
     <div class="row justify-content-between align-items-center w-100">
 
       <!-- Logo -->
       <div class="col-auto">
-        <a class="navbar-brand text-white" href="index.html">
-          <img src="{% static 'images/HANA.PNG'%}" height="50" width="50"
-            style="border-radius:50%; border:2px solid #fff; box-shadow:0 3px 8px rgba(0,0,0,0.3);">
+        <a class="navbar-brand text-white" href="{% url 'shop:shop_index' %}">
+          <img src="{% static 'images/cosmetics-logo.png'%}" height="50" width="50">
         </a>
       </div>
 
       <!-- Toggler + Offcanvas -->
       <div class="col-auto">
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-          aria-controls="offcanvasNavbar"
-          style="border: none; background: #fff; border-radius: 8px; padding: 6px 10px;">
+          aria-controls="offcanvasNavbar">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-          <div class="offcanvas-header" style="background:#b30000; color:#fff;">
+        <div class="offcanvas offcanvas-end hana-offcanvas" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+          <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasNavbarLabel">منو</h5>
             <button type="button" class="btn-close btn-close-white text-reset" data-bs-dismiss="offcanvas"
               aria-label="Close"></button>
@@ -29,29 +182,23 @@
 
           <!-- Menu Items -->
           <div class="offcanvas-body">
-            <ul class="navbar-nav justify-content-end flex-grow-1 gap-2 gap-md-4 pe-3">
+            <ul class="navbar-nav justify-content-end flex-grow-1 gap-2 gap-md-3 pe-3">
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'shop:shop_index' %}"
-                  style="font-family:'VAZIRmatn' !important; color:#b30000; background:#fff; padding:6px 14px; border-radius:20px; transition:0.3s;">
+                <a class="nav-link hana-nav-link" href="{% url 'shop:shop_index' %}">
                   خانه
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'shop:about' %}"
-                  style="font-family:'VAZIRmatn' !important; color:#b30000; background:#fff; padding:6px 14px; border-radius:20px; transition:0.3s;">درباره ما</a>
+                <a class="nav-link hana-nav-link" href="{% url 'shop:about' %}">درباره ما</a>
               </li>
-              <li class="nav-item"><a class="nav-link" href="{% url 'shop:search' %}"
-                  style="font-family:'VAZIRmatn' !important; color:#b30000; background:#fff; padding:6px 14px; border-radius:20px; transition:0.3s;">جست و جو</a></li>
+              <li class="nav-item"><a class="nav-link hana-nav-link" href="{% url 'shop:search' %}">جست و جو</a></li>
               {% if user.is_admin %}
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdownBlog" data-bs-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false"
-                  style="font-family:'VAZIRmatn' !important; color:#b30000; background:#fff; padding:6px 14px; border-radius:20px; transition:0.3s;">سفارشات</a>
+                <a class="nav-link dropdown-toggle hana-nav-link" href="#" id="dropdownBlog" data-bs-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">سفارشات</a>
                 <ul class="dropdown-menu list-unstyled" aria-labelledby="dropdownBlog">
-                  <li><a href="{% url 'payment:shipped_dash' %}" class="dropdown-item item-anchor"
-                      style="font-family:'VAZIRmatn' !important; color:#b30000; background:#fff; padding:6px 14px; border-radius:20px; transition:0.3s;">سفارشات ارسال شده</a></li>
-                  <li><a href="{% url 'payment:not_shipped_dash' %}" class="dropdown-item item-anchor"
-                      style="font-family:'VAZIRmatn' !important; color:#b30000; background:#fff; padding:6px 14px; border-radius:20px; transition:0.3s;">سفارشات ارسال نشده</a></li>
+                  <li><a href="{% url 'payment:shipped_dash' %}" class="dropdown-item item-anchor hana-nav-link">سفارشات ارسال شده</a></li>
+                  <li><a href="{% url 'payment:not_shipped_dash' %}" class="dropdown-item item-anchor hana-nav-link">سفارشات ارسال نشده</a></li>
                 </ul>
               </li>
               {% endif %}
@@ -59,17 +206,12 @@
 
 
               {% if user.is_authenticated %}
-              <li class="nav-item"><a class="nav-link" href="{% url 'shop:update_info' %}"
-                  style="font-family:'VAZIRmatn' !important; color:#b30000; background:#fff; padding:6px 14px; border-radius:20px; transition:0.3s;">تغییر اطلاعات حساب</a></li>
-              <li class="nav-item"><a class="nav-link" href="{% url 'shop:update' %}"
-                  style="font-family:'VAZIRmatn' !important; color:#b30000; background:#fff; padding:6px 14px; border-radius:20px; transition:0.3s;">تغییر پروفایل</a></li>
-              <li class="nav-item"><a class="nav-link" href="{% url 'shop:logout' %}"
-                  style="font-family:'VAZIRmatn' !important; color:#b30000; background:#fff; padding:6px 14px; border-radius:20px; transition:0.3s;">خروج</a></li>
+              <li class="nav-item"><a class="nav-link hana-nav-link" href="{% url 'shop:update_info' %}">تغییر اطلاعات حساب</a></li>
+              <li class="nav-item"><a class="nav-link hana-nav-link" href="{% url 'shop:update' %}">تغییر پروفایل</a></li>
+              <li class="nav-item"><a class="nav-link hana-nav-link" href="{% url 'shop:logout' %}">خروج</a></li>
               {% else %}
-              <li class="nav-item"><a class="nav-link" href="{% url 'shop:login' %}"
-                  style="font-family:'VAZIRmatn' !important; color:#b30000; background:#fff; padding:6px 14px; border-radius:20px; transition:0.3s;">ورود</a></li>
-              <li class="nav-item"><a class="nav-link" href="{% url 'shop:register' %}"
-                  style="font-family:'VAZIRmatn' !important; color:#b30000; background:#fff; padding:6px 14px; border-radius:20px; transition:0.3s;">ثبت نام</a></li>
+              <li class="nav-item"><a class="nav-link hana-nav-link" href="{% url 'shop:login' %}">ورود</a></li>
+              <li class="nav-item"><a class="nav-link hana-nav-link" href="{% url 'shop:register' %}">ثبت نام</a></li>
               {% endif %}
             </ul>
           </div>
@@ -80,8 +222,7 @@
       <div class="col-3 col-lg-auto">
         <ul class="list-unstyled d-flex m-0">
           <li class="d-none d-lg-block">
-            <a href="{% url 'cart:cart_summary' %}" class="mx-3"
-              style="font-family:'VAZIRmatn' !important; color:#fff; background:#b30000; padding:6px 16px; border-radius:20px; font-weight:bold; text-decoration:none; box-shadow:0 2px 6px rgba(0,0,0,0.2); transition:0.3s;">
+            <a href="{% url 'cart:cart_summary' %}" class="mx-3 hana-cart-link">
               سبد خرید <span class="wishlist-count" id="cart_quantity">{{ cart|length }}</span>
             </a>
           </li>

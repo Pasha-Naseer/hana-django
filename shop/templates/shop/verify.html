@@ -1,28 +1,125 @@
 {% extends 'shop/base.html' %}
 
 {% block content %}
+<style>
+  :root{
+    --cream:#FBF7F1;
+    --paper:#FFFFFF;
+    --wine:#7A0C1E;
+    --wine-deep:#570815;
+    --gold:#B08D57;
+    --ink:#2B2320;
+    --ink-soft:#6E655D;
+    --line:#E9DFD1;
+  }
 
-<section id="billboard" class="py-5" style="background-color: #f8f9fa;">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card shadow-sm border-0" style="background-color: #ffffff; padding: 2rem;">
-          <h1 class="section-title text-center mb-4" data-aos="fade-up" style="color: #333;">ثبت نام</h1>
-          <h6 class="text-center mb-4" style="color: #555;">تا 3 دقیقه می توانید کد ارسالی را وارد کنید!</h6>
-          <form method="POST" action="{% url 'shop:verify_code' %}" data-aos="fade-up" data-aos-delay="300">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="text-center mt-3">
-              <button type="submit" class="btn btn-light border border-secondary px-4 py-2" style="color: #333;">ثبت نام</button>
-            </div>
-          </form>
-        </div>
-      </div>
+  #verify-billboard{
+    background:var(--cream);
+    padding:56px 16px 72px;
+    font-family:'VAZIRmatn', sans-serif;
+    color:var(--ink);
+    direction:rtl;
+  }
+
+  .verify-wrap{
+    max-width:460px;
+    margin:0 auto;
+  }
+
+  .verify-header{
+    text-align:center;
+    margin-bottom:12px;
+  }
+  .verify-title{
+    font-size:1.6rem;
+    font-weight:700;
+    color:var(--wine-deep);
+    margin:0 0 10px;
+  }
+  .verify-subtitle{
+    font-size:0.88rem;
+    color:var(--ink-soft);
+    margin:0 0 32px;
+  }
+
+  .verify-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:32px 28px;
+    text-align:center;
+  }
+
+  /* Django form fields */
+  .verify-card form p{
+    text-align:right;
+    margin-bottom:16px;
+  }
+  .verify-card form label{
+    display:block;
+    font-size:0.88rem;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .verify-card form input[type="text"],
+  .verify-card form input[type="number"],
+  .verify-card form input:not([type]),
+  .verify-card form select{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:10px 12px;
+    font-family:inherit;
+    font-size:0.9rem;
+    background:var(--paper);
+    color:var(--ink);
+    box-sizing:border-box;
+    text-align:center;
+    letter-spacing:2px;
+  }
+  .verify-card form input:focus,
+  .verify-card form select:focus{
+    outline:none;
+    border-color:var(--gold);
+  }
+
+  .verify-btn{
+    display:block;
+    width:100%;
+    text-align:center;
+    background:var(--wine);
+    color:#fff;
+    border:none;
+    border-radius:4px;
+    padding:13px 18px;
+    font-size:0.98rem;
+    font-weight:700;
+    font-family:inherit;
+    cursor:pointer;
+    margin-top:10px;
+    transition: background .2s ease;
+  }
+  .verify-btn:hover{
+    background:var(--wine-deep);
+  }
+</style>
+
+<section id="verify-billboard">
+  <div class="verify-wrap">
+
+    <div class="verify-header" data-aos="fade-up">
+      <h1 class="verify-title">ثبت نام</h1>
+      <p class="verify-subtitle">تا ۳ دقیقه می‌توانید کد ارسالی را وارد کنید!</p>
     </div>
+
+    <div class="verify-card" data-aos="fade-up" data-aos-delay="200">
+      <form method="POST" action="{% url 'shop:verify_code' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="verify-btn">ثبت نام</button>
+      </form>
+    </div>
+
   </div>
 </section>
-
-
-
-
 {% endblock %}

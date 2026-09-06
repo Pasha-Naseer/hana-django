@@ -1411,10 +1411,6 @@ a.btn-link:after {
   background-color: var(--bs-white);
 }
 
-a.btn-link:before {
-  background-color: var(--bs-gray);
-  width: 100%;
-}
 
 a.btn-link.is-checked:after,
 a.btn-link:hover:after {

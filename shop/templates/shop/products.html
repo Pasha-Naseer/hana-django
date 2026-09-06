@@ -2,91 +2,198 @@
 {% load humanize %}
 {% load static %}
 {% block content %}
-<section id="billboard" class="py-5" style="background:#fff;">
-  <div class="container text-center">
+<style>
+  :root{
+    --cream:#FBF7F1;
+    --paper:#FFFFFF;
+    --wine:#7A0C1E;
+    --wine-deep:#570815;
+    --gold:#B08D57;
+    --ink:#2B2320;
+    --ink-soft:#6E655D;
+    --line:#E9DFD1;
+  }
 
-    <!-- Collection Card -->
-    <div class="row justify-content-center mb-4">
-      <div class="card shadow-sm border-0" style="width:18rem; border-radius:16px; overflow:hidden;" data-aos="zoom-in">
-        <img class="card-img-top" src="{{ collection.image.url }}" alt="{{ collection.name }}">
-      </div>
+  #collection-billboard{
+    background:var(--cream);
+    padding:56px 16px 72px;
+    font-family:'VAZIRmatn', sans-serif;
+    color:var(--ink);
+  }
+
+  .collection-wrap{
+    max-width:1160px;
+    margin:0 auto;
+    text-align:center;
+  }
+
+  /* ---------- Collection banner ---------- */
+  .collection-banner{
+    width:280px;
+    max-width:80%;
+    margin:0 auto 32px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    overflow:hidden;
+    background:var(--paper);
+  }
+  .collection-banner img{
+    width:100%;
+    height:auto;
+    display:block;
+  }
+
+  .collection-title{
+    font-size:1.7rem;
+    font-weight:700;
+    color:var(--wine-deep);
+    margin:0 0 16px;
+  }
+
+  .collection-desc{
+    max-width:640px;
+    margin:0 auto 48px;
+    font-size:0.95rem;
+    line-height:1.85;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- Product grid ---------- */
+  .prod-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap:24px;
+    direction:rtl;
+  }
+
+  .prod-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:14px;
+    text-align:center;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .prod-card:hover{
+    border-color:var(--gold);
+    box-shadow:0 4px 14px rgba(0,0,0,0.06);
+  }
+
+  .prod-image{
+    position:relative;
+    width:100%;
+    aspect-ratio: 6 / 5;
+    overflow:hidden;
+    border-radius:4px;
+    background:var(--cream);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:8px;
+    margin-bottom:14px;
+  }
+  .prod-image img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:center;
+    background:#fff;
+    transition: transform .4s ease-in-out;
+  }
+  .prod-card:hover .prod-image img{
+    transform: scale(1.05);
+  }
+
+  .prod-name{
+    margin:0 0 10px;
+  }
+  .prod-name a{
+    color:var(--wine-deep);
+    font-size:0.92rem;
+    font-weight:700;
+    text-decoration:none;
+    text-transform:uppercase;
+  }
+  .prod-name a:hover{
+    color:var(--wine);
+  }
+
+  .prod-price-old{
+    color:var(--ink-soft);
+    font-size:0.82rem;
+    text-decoration:line-through;
+    text-decoration-color:#B96B6B;
+    margin:8px 0 2px;
+  }
+  .prod-price-final{
+    color:var(--wine-deep);
+    font-size:0.98rem;
+    font-weight:700;
+    margin:0 0 4px;
+  }
+  .prod-no-discount{
+    color:var(--ink-soft);
+    font-size:0.78rem;
+    margin:0 0 10px;
+  }
+
+  .prod-status{
+    display:inline-block;
+    font-size:0.72rem;
+    padding:3px 12px;
+    border-radius:20px;
+  }
+  .prod-status.in{ background:#EAF3EA; color:#2F6B3A; }
+  .prod-status.out{ background:#F2E9E9; color:#8A3B3B; }
+</style>
+
+<section id="collection-billboard">
+  <div class="collection-wrap">
+
+    <div class="collection-banner" data-aos="zoom-in">
+      <img src="{{ collection.image.url }}" alt="{{ collection.name }}">
     </div>
 
-    <!-- Collection Title -->
-    <h1 class="section-title mb-3" data-aos="fade-up"
-        style="color:#870000; font-family:'VAZIRmatn' !important; font-weight:bold; font-size:2rem;">
-      {{ collection.name }}
-    </h1>
+    <h1 class="collection-title" data-aos="fade-up">{{ collection.name }}</h1>
 
-    <!-- Collection Description -->
-    <div class="row justify-content-center">
-      <div class="col-md-8 text-center" data-aos="fade-up" data-aos-delay="200">
-        <p style="color:#444; font-size:1rem; line-height:1.7;">{{ collection.description }}</p>
-      </div>
-    </div>
+    <p class="collection-desc" data-aos="fade-up" data-aos-delay="200">
+      {{ collection.description }}
+    </p>
 
-    <!-- Swiper for Products -->
+    <div class="prod-grid" data-aos="fade-up" data-aos-delay="400">
+      {% for product in products_list %}
+        <div class="prod-card">
 
-<div class="container py-4 mt-5" data-aos="fade-up" data-aos-delay="400">
-  <div class="row justify-content-center g-4">
-    {% for product in products_list %}
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-        <div class="collection-card p-3 text-center">
-          <!-- Product Image -->
-       <div class="collection-image mb-3"
-     style="position: relative; width: 100%; aspect-ratio: 6 / 5;
-            overflow: hidden; border-radius: 12px; background-color: #fdf9f3;
-            display: flex; align-items: center; justify-content: center; padding: 8px;">
-  <a href="{% url 'shop:products_detail' product.collection.id product.id %}">
-    <img src="{{ product.image.url }}" alt="{{ product.name }}"
-         class="rounded"
-         style="width: 100%; height: 100%; object-fit: contain; object-position: center;
-                background-color: #fff; transition: transform 0.4s ease-in-out;">
-  </a>
-</div>
-
-
-          <!-- Product Content -->
-          <div class="collection-content">
-            <h5 class="element-title text-uppercase mb-2">
-              <a href="{% url 'shop:products_detail' product.collection.id product.id %}"
-                 style="color:#6B3E26; font-size:1rem; font-weight:bold; text-decoration:none;">
-                {{ product.name }}
-              </a>
-            </h5>
-
+          <div class="prod-image">
+            <a href="{% url 'shop:products_detail' product.collection.id product.id %}">
+              <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </a>
           </div>
-          <!-- Price & Discount -->
-{% if product.has_discount %}
-  <!-- Original Price with Red Cross -->
-  <h5 class="mt-3" style="color:#999; font-size:1rem; text-decoration: line-through; text-decoration-color:red;">
-    قیمت: {{ product.price|intcomma }}T
-  </h5>
-  <!-- Discount Info -->
-  <h5 style="color:#870000; font-size:1rem;">{{ product.price_with_discount|intcomma }}T</h5>
-{% else %}
-  <!-- Normal Price (no discount) -->
-  <h5 class="mt-3" style="color:#870000; font-size:1rem;">
-    {{ product.price|intcomma }}T
-  </h5>
-  <h6 style="color:#999; font-size:0.9rem;">تخفیف ندارد</h6>
-{% endif %}
-          <!-- Availability Badge -->
-          {% if product.quantity %}
-            <span class="badge" style="background:#B8860B; color:white; border-radius:10px; padding:6px 12px;">
-              موجود
-            </span>
+
+          <h5 class="prod-name">
+            <a href="{% url 'shop:products_detail' product.collection.id product.id %}">
+              {{ product.name }}
+            </a>
+          </h5>
+
+          {% if product.has_discount %}
+            <p class="prod-price-old">قیمت: {{ product.price|intcomma }}T</p>
+            <p class="prod-price-final">{{ product.price_with_discount|intcomma }}T</p>
           {% else %}
-            <span class="badge" style="background:#999; color:white; border-radius:10px; padding:6px 12px;">
-              ناموجود
-            </span>
+            <p class="prod-price-final">{{ product.price|intcomma }}T</p>
+            <p class="prod-no-discount">تخفیف ندارد</p>
           {% endif %}
+
+          {% if product.quantity %}
+            <span class="prod-status in">موجود</span>
+          {% else %}
+            <span class="prod-status out">ناموجود</span>
+          {% endif %}
+
         </div>
-      </div>
-    {% endfor %}
-  </div>
-</div>
+      {% endfor %}
+    </div>
+
   </div>
 </section>
-
 {% endblock %}

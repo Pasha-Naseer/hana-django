@@ -1,7 +1,7 @@
 import random
 
 from django.shortcuts import render, redirect
-from .models import Collection, Product, Profile, Blog, Comment
+from .models import Collection, Product, Profile, Blog, Comment, Festival, InstagramPost
 from django.utils import timezone
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -55,14 +55,15 @@ def blog_detail(request, blog_id):
 
 def shop_index(request):
     latest_collection_list = Collection.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")
-    famous_product_list = Product.objects.filter(Q(name__icontains='Simple') | Q(name__icontains='Nivea') |
-                                                 Q(name__icontains='Loreal') | Q(name__icontains='Euphoria'))[:4]
+    famous_product_list = Festival.objects.all()
     blog_list = Blog.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:3]
     comments = Comment.objects.order_by('-date_submitted').filter(confirmed=True)[:20]
+    instagram_posts = InstagramPost.objects.all()
     context = {"latest_collection_list": latest_collection_list,
                'famous_product_list': famous_product_list,
                'blog_list': blog_list,
                'comments': comments,
+               'instagram_posts': instagram_posts,
                }
     if request.method == 'POST':
         searched = request.POST['searched']

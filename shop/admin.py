@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Collection, Product, Customer, Order, Profile, Blog, ProductCode, Comment, Festival
+from .models import (Collection, Product, Customer, Order,
+                     Profile, Blog, ProductCode, Comment, Festival, InstagramPost)
 # Used2B
 # from django.contrib.auth.models import User
 # is
@@ -9,8 +10,15 @@ from .models import User, OtpCode
 from django.contrib.auth.models import Group
 
 admin.site.register(ProductCode)
-admin.site.register(Comment)
 admin.site.register(Festival)
+admin.site.register(InstagramPost)
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_filter = ("confirmed",)
+
+admin.site.register(Comment, CommentAdmin)
+
 
 
 class ProductInline(admin.TabularInline):

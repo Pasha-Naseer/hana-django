@@ -157,7 +157,10 @@ class ProductCode(models.Model):
 
 
 class Festival(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, unique=True)
+
+    def __str__(self):
+        return self.product.name
 
 
 class Order(models.Model):
@@ -180,4 +183,12 @@ class Comment(models.Model):
     confirmed = models.BooleanField(default=False, null=True)
 
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username} - {self.text}"
+
+
+class InstagramPost(models.Model):
+    post_link = models.CharField(max_length=200)
+    img = models.ImageField(default="fallback.png")
+
+    def __str__(self):
+        return self.post_link

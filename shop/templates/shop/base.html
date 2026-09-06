@@ -26,6 +26,134 @@
    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
   <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css"/>
 </head>
+
+<style>
+  :root {
+    --hana-burgundy: #6d1128;
+    --hana-burgundy-deep: #4a0b1c;
+    --hana-rose: #b3364f;
+    --hana-gold: #c9a15a;
+    --hana-gold-soft: #e9d8b6;
+    --hana-cream: #faf6f0;
+    --hana-ink: #2b2320;
+    --hana-line: #ece3d8;
+  }
+
+  footer.hana-footer {
+    background: linear-gradient(160deg, var(--hana-burgundy) 0%, var(--hana-burgundy-deep) 100%) !important;
+    color: #fff !important;
+
+    box-shadow: 0 -8px 30px rgba(74,11,28,.20) !important;
+    font-family: 'VAZIRmatn', sans-serif !important;
+    overflow: hidden !important;
+  }
+
+  /* ---------- Logo + intro ---------- */
+  .hana-footer .hana-footer-logo img {
+    border-radius: 50% !important;
+    border: 3px solid var(--hana-gold-soft) !important;
+    box-shadow: 0 4px 14px rgba(0,0,0,.3) !important;
+    transition: transform .25s ease !important;
+  }
+  .hana-footer .hana-footer-logo:hover img {
+    transform: scale(1.06) !important;
+  }
+  .hana-footer .hana-footer-brand {
+    font-weight: 700 !important;
+    color: #fff !important;
+    margin-top: 16px !important;
+  }
+  .hana-footer .hana-footer-tagline {
+    color: rgba(255,255,255,.7) !important;
+    font-size: .85rem !important;
+    margin-top: 6px !important;
+  }
+
+  /* ---------- Widget titles ---------- */
+  .hana-footer .hana-widget-title {
+    color: var(--hana-gold-soft) !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    display: inline-block !important;
+    position: relative !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 20px !important;
+    border-bottom: none !important;
+  }
+  .hana-footer .hana-widget-title::after {
+    content: "" !important;
+    display: block !important;
+    width: 40px !important;
+    height: 3px !important;
+    background: var(--hana-gold) !important;
+    border-radius: 3px !important;
+    margin-top: 10px !important;
+  }
+
+  /* ---------- Quick links ---------- */
+  .hana-footer .menu-list {
+    line-height: 2.2 !important;
+  }
+  .hana-footer .menu-list li {
+    margin-bottom: 4px !important;
+  }
+  .hana-footer .menu-list a {
+    text-decoration: none !important;
+    color: rgba(255,255,255,.82) !important;
+    transition: all .25s ease !important;
+    position: relative !important;
+  }
+  .hana-footer .menu-list a:hover {
+    color: var(--hana-gold-soft) !important;
+    padding-right: 4px !important;
+  }
+
+  /* ---------- Contact ---------- */
+  .hana-footer .hana-contact-label {
+    color: rgba(255,255,255,.65) !important;
+    font-weight: 400 !important;
+    font-size: .88rem !important;
+    margin-bottom: 4px !important;
+  }
+  .hana-footer .hana-contact-value {
+    margin: 0 0 14px 0 !important;
+  }
+  .hana-footer .hana-contact-value a {
+    color: #fff !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    transition: color .25s ease !important;
+  }
+  .hana-footer .hana-contact-value a:hover {
+    color: var(--hana-gold-soft) !important;
+  }
+
+  /* ---------- Bottom bar ---------- */
+  .hana-footer .hana-footer-bottom {
+    background: #fff !important;
+    color: var(--hana-burgundy) !important;
+    padding: 20px 0 !important;
+    box-shadow: 0 -1px 0 var(--hana-line) inset !important;
+  }
+  .hana-footer .hana-footer-bottom .hana-bottom-label {
+    margin: 0 !important;
+    font-weight: 800 !important;
+    font-size: .82rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: .5px !important;
+    color: var(--hana-muted, #8a7d74) !important;
+  }
+  .hana-footer .hana-footer-bottom .hana-bottom-value {
+    margin: 2px 0 0 0 !important;
+    font-weight: 700 !important;
+    color: var(--hana-burgundy) !important;
+  }
+
+  @media (max-width: 767px) {
+    footer.hana-footer { border-radius: 22px 22px 0 0 !important; }
+  }
+</style>
 <body>
 {% include 'shop/navbar.html' %}
   {% if messages %}
@@ -63,32 +191,33 @@
 
 </body>
 
-<footer id="footer" class="mt-5" style="background: linear-gradient(135deg, #b30000, #ff4d4d); color: #fff; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.2);">
+
+<footer id="footer" class="hana-footer mt-5">
   <div class="container">
     <div class="row d-flex flex-wrap justify-content-between py-5">
 
       <!-- Logo + Social -->
       <div class="col-md-3 col-sm-6 mb-4">
         <div class="footer-menu footer-menu-001 text-center">
-          <div class="footer-intro mb-4">
+          <div class="footer-intro mb-2 hana-footer-logo">
             <a href="index.html">
-              <img src="{% static 'images/HANA.PNG' %}" alt="logo" width="70" height="70" style="border-radius:50%; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+              <img src="{% static 'images/HANA.PNG' %}" alt="logo" width="70" height="70">
             </a>
           </div>
-          <h6 style="font-weight:bold; color:#fff;">لوازم آرایشی بهداشتی هانا</h6>
-
+          <h6 class="hana-footer-brand">لوازم آرایشی بهداشتی هانا</h6>
+          <p class="hana-footer-tagline mb-0">اورجینال، اصیل، همیشه در کنار شما</p>
         </div>
       </div>
 
       <!-- Quick Links -->
       <div class="col-md-3 col-sm-6 mb-4">
         <div class="footer-menu footer-menu-002">
-          <h5 class="widget-title text-uppercase mb-4" style="color:#fff; font-weight:bold; border-bottom:2px solid #fff; display:inline-block; padding-bottom:5px;">لینک های سریع</h5>
-          <ul class="menu-list list-unstyled fs-6" style="line-height:2;">
-            <li><a href="{% url 'shop:shop_index' %}" style="text-decoration:none; color:#fff; transition:0.3s;">خانه</a></li>
-            <li><a href="{% url 'shop:about' %}" style="text-decoration:none; color:#fff; transition:0.3s;">درباره‌ی ما</a></li>
-            <li><a href="{% url 'shop:search'%}" style="text-decoration:none; color:#fff; transition:0.3s;">جست و جو</a></li>
-            <li><a href="{% url 'shop:blog' %}" style="text-decoration:none; color:#fff; transition:0.3s;">وبلاگ</a></li>
+          <h5 class="widget-title hana-widget-title">لینک های سریع</h5>
+          <ul class="menu-list list-unstyled fs-6">
+            <li><a href="{% url 'shop:shop_index' %}">خانه</a></li>
+            <li><a href="{% url 'shop:about' %}">درباره‌ی ما</a></li>
+            <li><a href="{% url 'shop:search'%}">جست و جو</a></li>
+            <li><a href="{% url 'shop:blog' %}">وبلاگ</a></li>
           </ul>
         </div>
       </div>
@@ -96,28 +225,36 @@
       <!-- Contact -->
       <div class="col-md-3 col-sm-6 mb-4">
         <div class="footer-menu footer-menu-004">
-          <h5 class="widget-title text-uppercase mb-4" style="color:#fff; font-weight:bold; border-bottom:2px solid #fff; display:inline-block; padding-bottom:5px;">ارتباط با ما</h5>
-          <h6>انتقادی پیشنهادی؟</h6>
-          <h6><a href="mailto:hanaoonlineshop94@gmail.com" style="color:#fff; text-decoration:none;">hanaonlineshop94@gmail.com</a></h6>
-          <h6>برای راهنمایی زنگ بزن</h6>
-          <h6><a href="tel:04134407631" style="color:#fff; text-decoration:none;">04134407631</a></h6>
-          <h6><a href="tel:09330134848" style="color:#fff; text-decoration:none;">09330134848</a></h6>
+          <h5 class="widget-title hana-widget-title">ارتباط با ما</h5>
+
+          <p class="hana-contact-label">انتقادی پیشنهادی؟</p>
+          <h6 class="hana-contact-value">
+            <a href="mailto:hanaoonlineshop94@gmail.com">hanaonlineshop94@gmail.com</a>
+          </h6>
+
+          <p class="hana-contact-label">برای راهنمایی زنگ بزن</p>
+          <h6 class="hana-contact-value">
+            <a href="tel:04134407631">04134407631</a>
+          </h6>
+          <h6 class="hana-contact-value">
+            <a href="tel:09330134848">09330134848</a>
+          </h6>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Bottom Bar -->
-  <div style="background:#fff; color:#b30000; border-radius:0 0 20px 20px; padding:15px 0; box-shadow:0 -2px 10px rgba(0,0,0,0.15);">
+  <div class="hana-footer-bottom">
     <div class="container">
       <div class="row text-center text-md-start">
         <div class="col-md-6 mb-2">
-          <h6 style="margin:0; font-weight:bold;">توسعه‌داده شده توسط</h6>
-          <h6 style="margin:0;">مهدی نصیرسلطانی</h6>
+          <h6 class="hana-bottom-label">توسعه‌داده شده توسط</h6>
+          <h6 class="hana-bottom-value">مهدی نصیرسلطانی</h6>
         </div>
         <div class="col-md-6">
-          <h6 style="margin:0; font-weight:bold;">شماره تماس</h6>
-          <h6 style="margin:0;">989911327751+</h6>
+          <h6 class="hana-bottom-label">شماره تماس</h6>
+          <h6 class="hana-bottom-value">989911327751+</h6>
         </div>
       </div>
     </div>

@@ -13,18 +13,19 @@
 
         <form method="POST" action="{% url 'shop:update' %}" style="text-align:center;">
           {% csrf_token %}
-          <div style="text-align:center;">
-            {{ user_form.as_p }}
-          </div>
+      <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+          {{ user_form.as_p }}
+      </div>
+
           <button type="submit" class="btn btn-primary"
-                  style="padding:10px 25px; font-size:16px; border-radius:8px; margin-top:15px;">
+                  style="padding:10px 25px; font-size:16px; border-radius:8px; margin-top:15px; background-color:#c9a15a">
             تغییر اطلاعات
           </button>
         </form>
 
         <br/><br/>
         <a href="{% url 'shop:update_password' %}" class="btn btn-secondary"
-           style="padding:10px 25px; font-size:16px; border-radius:8px;">
+           style="padding:10px 25px; font-size:16px; border-radius:8px; background-color:#660033">
           تغییر رمز
         </a>
       </div>

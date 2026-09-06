@@ -143,30 +143,33 @@ class UserChangeFormUser(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'phone_number', 'email', 'first_name', 'last_name',)
+        fields = (
+            'username',
+            'phone_number',
+            'email',
+            'first_name',
+            'last_name',
+        )
 
     def __init__(self, *args, **kwargs):
-         super(UserChangeFormUser, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
-         self.fields['username'].widget.attrs['class'] = 'form-control'
-         self.fields['username'].widget.attrs['placeholder'] = 'نام کاربری'
-         self.fields['username'].label = 'نام کاربری'
+        fields_data = {
+            'username': ('نام کاربری', 'نام کاربری'),
+            'phone_number': ('شماره تلفن', 'شماره تلفن'),
+            'email': ('ایمیل', 'ایمیل'),
+            'first_name': ('نام', 'نام'),
+            'last_name': ('نام خانوادگی', 'نام خانوادگی'),
+        }
 
-         self.fields['phone_number'].widget.attrs['class'] = 'form-control'
-         self.fields['phone_number'].widget.attrs['placeholder'] = 'شماره تلفن'
-         self.fields['phone_number'].label = 'شماره تلفن'
+        for field_name, (label, placeholder) in fields_data.items():
+            self.fields[field_name].label = label
 
-         self.fields['email'].widget.attrs['class'] = 'form-control'
-         self.fields['email'].widget.attrs['placeholder'] = 'ایمیل'
-         self.fields['email'].label = 'ایمیل'
-
-         self.fields['first_name'].widget.attrs['class'] = 'form-control'
-         self.fields['first_name'].widget.attrs['placeholder'] = 'نام'
-         self.fields['first_name'].label = 'نام'
-
-         self.fields['last_name'].widget.attrs['class'] = 'form-control'
-         self.fields['last_name'].widget.attrs['placeholder'] = 'نام خانوادگی'
-         self.fields['last_name'].label = 'نام خانوادگی'
+            self.fields[field_name].widget.attrs.update({
+                'class': 'form-control text-center',
+                'placeholder': placeholder,
+                'style': 'text-align: center;',
+            })
 
 
 

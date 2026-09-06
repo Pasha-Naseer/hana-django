@@ -1,110 +1,305 @@
 {% extends 'shop/base.html' %}
 {% load humanize %}
 {% block content %}
-<section id="billboard" class="py-4" style="background:#fff;">
-  <div class="container">
+<style>
+  :root{
+    --cream:#FBF7F1;
+    --paper:#FFFFFF;
+    --wine:#7A0C1E;
+    --wine-deep:#570815;
+    --gold:#B08D57;
+    --ink:#2B2320;
+    --ink-soft:#6E655D;
+    --line:#E9DFD1;
+  }
 
-    <div class="row justify-content-center">
-      <!-- Product Image -->
-      <div class="card shadow-sm border-0 mb-3" style="width:28rem; border-radius:12px; overflow:hidden;" data-aos="zoom-in">
-        <img src="{{ product.image.url }}" alt="{{ product.name }}"
-             style="width:100%; height:auto; object-fit:cover;">
-      </div>
-    </div>
+  #billboard{
+    background:var(--cream);
+    padding:56px 16px 72px;
+    font-family:'VAZIRmatn', sans-serif;
+    color:var(--ink);
+  }
 
-    <!-- Product Title -->
-    <h2 class="section-title text-center mb-3" data-aos="fade-up"
-        style="color:#870000; font-family:'VAZIRmatn' !important; font-weight:bold; font-size:1.4rem;">
-      {{ product.name }}
-    </h2>
+  .pd-wrap{
+    max-width:1080px;
+    margin:0 auto;
+  }
 
-    <!-- Product Details -->
-    <div class="row justify-content-center">
-      <div class="col-md-8 text-center" data-aos="fade-up" data-aos-delay="200">
+  /* ---------- Top grid: gallery + buy box ---------- */
+  .pd-top{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:48px;
+    align-items:start;
+  }
+  @media (max-width: 860px){
+    .pd-top{ grid-template-columns: 1fr; gap:32px; }
+  }
 
-        <!-- Availability -->
-         <!--
-        {% if product.is_available %}
-        <span class="badge" style="background:#870000; color:white; border-radius:6px; padding:4px 8px; font-size:0.8rem;">
-          موجود
-        </span>
-        {% else %}
-        <span class="badge" style="background:#999; color:white; border-radius:6px; padding:4px 8px; font-size:0.8rem;">
-          ناموجود
-        </span>
-        {% endif %}
-      -->
-        <!-- Description -->
-        {% if product.description %}
-        <p class="mt-2" style="color:#444; font-size:0.85rem; line-height:1.5; white-space: pre-wrap; word-wrap: break-word;text-align: right;">
-          {{ product.description }}
-        </p>
-        {% endif %}
-<!-- Price & Discount -->
-{% if product.has_discount %}
-  <!-- Original Price with Red Cross -->
-  <h5 class="mt-3" style="color:#999; font-size:1rem; text-decoration: line-through; text-decoration-color:red;">
-    قیمت: {{ product.price|intcomma }}T
-  </h5>
-  <!-- Discount Info -->
-  <h5 style="color:#870000; font-size:1rem;">تخفیف: {{ product.discount }}%</h5>
-  <h5 style="color:#870000; font-size:1rem;">قیمت نهایی: {{ product.price_with_discount|intcomma }}T</h5>
-{% else %}
-  <!-- Normal Price (no discount) -->
-  <h5 class="mt-3" style="color:#870000; font-size:1rem;">
-    قیمت: {{ product.price|intcomma }}T
-  </h5>
-  <h6 style="color:#999; font-size:0.9rem;">تخفیف ندارد</h6>
-{% endif %}
+  /* Gallery */
+  .pd-gallery{ position:sticky; top:24px; }
+  @media (max-width: 860px){ .pd-gallery{ position:static; } }
 
-    {% if product.has_code %}
-  <div class="row justify-content-center align-items-center mt-3">
-    <div class="col-md-2"><h6 style="color:#444; font-size:0.9rem;">کد محصول</h6></div>
-    <div class="col-md-4">
-      <select class="form-select text-center" id="code-cart" style="border-radius:6px; font-size:0.85rem; padding:4px;">
-        {% for code in product.codes.all %}
-          <option value="{{ code.id }}"> {{ code.code }} </option>
-        {{code.code}}
-        {% endfor %}
-      </select>
-    </div>
-  </div>
-{% endif %}
-        <!-- Quantity Selector -->
-        <div class="row justify-content-center align-items-center mt-3">
-          <div class="col-md-2"><h6 style="color:#444; font-size:0.9rem;">تعداد</h6></div>
-          <div class="col-md-2">
-            <select class="form-select text-center" id="qty-cart" style="border-radius:6px; font-size:0.85rem; padding:4px;">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select>
-          </div>
+  .pd-main-image{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:4px;
+    overflow:hidden;
+    aspect-ratio: 1 / 1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .pd-main-image img{
+    width:100%; height:100%; object-fit:cover;
+    transition: transform .5s ease;
+  }
+  .pd-main-image:hover img{ transform: scale(1.035); }
+
+  .pd-thumbs{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .pd-thumb{
+    width:76px; height:76px;
+    border-radius:4px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    cursor:pointer;
+    background:var(--paper);
+    transition: border-color .2s ease;
+  }
+  .pd-thumb:hover{ border-color:var(--gold); }
+  .pd-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  /* ---------- Buy box ---------- */
+  .pd-buybox{
+    text-align:right;
+    direction:rtl;
+  }
+
+  .pd-title{
+    font-size:1.55rem;
+    font-weight:700;
+    color:var(--wine-deep);
+    line-height:1.4;
+    margin:0 0 10px;
+  }
+
+  .pd-status{
+    display:inline-block;
+    font-size:0.78rem;
+    padding:4px 12px;
+    border-radius:20px;
+    margin-bottom:22px;
+  }
+  .pd-status.in{ background:#EAF3EA; color:#2F6B3A; }
+  .pd-status.out{ background:#F2E9E9; color:#8A3B3B; }
+
+  .pd-price-block{
+    border-top:1px solid var(--gold);
+    border-bottom:1px solid var(--line);
+    padding:18px 0;
+    margin-bottom:22px;
+  }
+  .pd-price-old{
+    color:var(--ink-soft);
+    font-size:0.95rem;
+    text-decoration:line-through;
+    text-decoration-color:#B96B6B;
+    margin:0 0 4px;
+  }
+  .pd-discount-tag{
+    display:inline-block;
+    background:var(--wine);
+    color:#fff;
+    font-size:0.78rem;
+    padding:2px 10px;
+    border-radius:3px;
+    margin-bottom:8px;
+  }
+  .pd-price-final{
+    font-size:1.7rem;
+    font-weight:700;
+    color:var(--wine-deep);
+    margin:0;
+  }
+  .pd-price-final small{
+    font-size:1rem;
+    font-weight:400;
+    color:var(--ink-soft);
+    margin-right:4px;
+  }
+  .pd-no-discount{
+    color:var(--ink-soft);
+    font-size:0.85rem;
+    margin-top:6px;
+  }
+
+  /* selectors */
+  .pd-field-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:14px;
+  }
+  .pd-field-label{
+    font-size:0.9rem;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .pd-select{
+    flex:1;
+    max-width:220px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:8px 10px;
+    font-family:inherit;
+    font-size:0.9rem;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .pd-select:focus{
+    outline:none;
+    border-color:var(--gold);
+  }
+
+  .pd-actions{ margin-top:24px; }
+  .pd-btn{
+    display:block;
+    width:100%;
+    text-align:center;
+    border:none;
+    border-radius:4px;
+    padding:13px 18px;
+    font-size:0.98rem;
+    font-family:inherit;
+    cursor:pointer;
+    transition: background .2s ease, transform .1s ease;
+  }
+  .pd-btn-primary{
+    background:var(--wine);
+    color:#fff;
+    margin-bottom:12px;
+  }
+  .pd-btn-primary:hover{ background:var(--wine-deep); }
+  .pd-btn-secondary{
+    background:transparent;
+    color:var(--wine);
+    border:1px solid var(--wine);
+    text-decoration:none;
+  }
+  .pd-btn-secondary:hover{ background:var(--wine); color:#fff; }
+
+  /* ---------- Description + long description ---------- */
+  .pd-section{
+    max-width:820px;
+    margin:56px auto 0;
+    direction:rtl;
+    text-align:right;
+  }
+  .pd-section-title{
+    font-size:1.1rem;
+    font-weight:700;
+    color:var(--wine-deep);
+    border-right:3px solid var(--gold);
+    padding-right:12px;
+    margin-bottom:16px;
+  }
+  .pd-desc-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:24px 28px;
+    color:var(--ink);
+    font-size:0.95rem;
+    line-height:1.9;
+  }
+  .pd-longdesc{
+    margin-top:32px;
+    color:var(--ink-soft);
+    font-size:0.9rem;
+    line-height:1.85;
+    white-space:pre-wrap;
+    word-wrap:break-word;
+  }
+
+  /* modal image */
+  .modal-content.bg-transparent img{ border-radius:6px; }
+</style>
+
+<section id="billboard">
+  <div class="pd-wrap">
+
+    <div class="pd-top">
+
+      <!-- Gallery -->
+      <div class="pd-gallery" data-aos="fade">
+        <div class="pd-main-image">
+          <img id="pd-main-img" src="{{ product.image.url }}" alt="{{ product.name }}">
         </div>
-        {% if product.quantity %}
-        <br/>
-          <span class="badge" style="background:#008000; color:white; border-radius:6px; padding:4px 8px; font-size:0.8rem;">
-          موجود
-        </span>
-        <br/>
-        <!-- Add to Cart Button -->
-        <button type="button" value="{{ product.id }}" class="btn mt-3" id="add-cart"
-                style="background:#870000; color:white; border-radius:6px; padding:6px 14px; font-size:0.9rem;">
-          اضافه به سبد خرید
-        </button>
-        <br/>
-        <a href="{% url 'cart:cart_summary' %}" class="btn mt-3" style="background:#870000; color:white; border-radius:6px; padding:6px 14px; font-size:0.9rem;">سبد خرید</a>
-      </div>
-      {% else %}
-      <br/>
-        <span class="badge" style="background:#999; color:white; border-radius:6px; padding:4px 8px; font-size:0.8rem;">
-          ناموجود
-        </span>
 
-      {% endif %}
-     {% if product.help_images %}
+      </div>
+
+      <!-- Buy box -->
+      <div class="pd-buybox" data-aos="fade-up">
+        <h2 class="pd-title">{{ product.name }}</h2>
+
+        {% if product.quantity %}
+          <span class="pd-status in">موجود</span>
+        {% else %}
+          <span class="pd-status out">ناموجود</span>
+        {% endif %}
+
+        <div class="pd-price-block">
+          {% if product.has_discount %}
+            <p class="pd-price-old">قیمت: {{ product.price|intcomma }}T</p>
+            <span class="pd-discount-tag">{{ product.discount }}% تخفیف</span>
+            <p class="pd-price-final">{{ product.price_with_discount|intcomma }}<small>T</small></p>
+          {% else %}
+            <p class="pd-price-final">{{ product.price|intcomma }}<small>T</small></p>
+            <p class="pd-no-discount">تخفیف ندارد</p>
+          {% endif %}
+        </div>
+
+        {% if product.has_code %}
+        <div class="pd-field-row">
+          <span class="pd-field-label">کد محصول</span>
+          <select class="pd-select" id="code-cart">
+            {% for code in product.codes.all %}
+              <option value="{{ code.id }}">{{ code.code }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {% endif %}
+
+        <div class="pd-field-row">
+          <span class="pd-field-label">تعداد</span>
+          <select class="pd-select" id="qty-cart">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+
+        {% if product.quantity %}
+        <div class="pd-actions">
+          <button type="button" value="{{ product.id }}" class="pd-btn pd-btn-primary" id="add-cart">
+            اضافه به سبد خرید
+          </button>
+          <a href="{% url 'cart:cart_summary' %}" class="pd-btn pd-btn-secondary">سبد خرید</a>
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+  {% if product.help_images %}
 <div class="container text-center my-4">
   <!-- Image row -->
   <div class="d-flex justify-content-center gap-3 flex-wrap">
@@ -153,23 +348,26 @@
 {% endif %}
 
 
-        </div>
-
-    </div>
-<div class="row justify-content-center">
-      <div class="col-md-8 text-center" data-aos="fade-up" data-aos-delay="200">
-               {% if product.description_long %}
-        <p class="mt-2" style="color:#444; font-size:0.85rem; line-height:1.5; white-space: pre-wrap; word-wrap: break-word;text-align: right;">
-          {{ product.description_long }}
-        </p>
-        {% endif %}
+    <!-- Description -->
+    {% if product.description %}
+    <div class="pd-section" data-aos="fade-up">
+      <h3 class="pd-section-title">توضیحات محصول</h3>
+      <div class="pd-desc-card">
+        {{ product.description|linebreaksbr }}
       </div>
-</div>
+    </div>
+    {% endif %}
+
+    {% if product.description_long %}
+    <div class="pd-section">
+      <p class="pd-longdesc">{{ product.description_long }}</p>
+    </div>
+    {% endif %}
+
+  </div>
 </section>
 
-
 <script>
-// Check if button pressed
 $(document).on('click', '#add-cart', function(e){
     e.preventDefault();
     $.ajax({
